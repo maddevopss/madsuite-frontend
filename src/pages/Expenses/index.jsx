@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import PageHeader from "../../components/PageHeader/index.jsx";
+import PageHeader from "../../components/PageHeader";
 import { getExpenses, createExpense, deleteExpense } from "../../api/expenses.api";
 import { getProjets } from "../../api/projets.api";
-import styles from "./index.module.css";
+
 
 export default function Expenses() {
   const [expenses, setExpenses] = useState([]);

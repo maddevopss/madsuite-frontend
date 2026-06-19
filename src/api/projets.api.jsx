@@ -30,6 +30,9 @@ export const deleteProject = async (id) => {
   return res.data;
 };
 
+// Alias for legacy callers (Expenses, CalculKm)
+export const getProjets = getProjects;
+
 // GET AI SUMMARY
 export const getProjectAiSummary = async (id) => {
   const res = await api.get(`/projets/${id}/ai-summary`);

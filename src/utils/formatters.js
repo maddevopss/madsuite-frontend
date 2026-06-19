@@ -13,6 +13,9 @@ export function formatMoney(value) {
   });
 }
 
+// Alias used by Estimates module
+export const formatCurrency = formatMoney;
+
 export function formatDate(value) {
   if (!value) return "";
   return new Date(value).toLocaleDateString("fr-CA");

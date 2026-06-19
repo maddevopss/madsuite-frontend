@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Button } from "../../components/ui";
 import { useAuth } from "../../api/authContext";
-import stripeApi from "../../api/stripe.api";
+import { createCheckoutSession } from "../../api/stripe.api";
 import { useToast } from "../../ToastContext";
 import "./onboarding.css";
 import { motion } from "framer-motion";
@@ -20,7 +20,7 @@ export default function Onboarding() {
   const handleSubscribe = async () => {
     setLoading(true);
     try {
-      const { url } = await stripeApi.createCheckoutSession(
+      const { url } = await createCheckoutSession(
         `${window.location.origin}/dashboard?onboarding=success`,
         `${window.location.origin}/onboarding?payment=cancelled`
       );

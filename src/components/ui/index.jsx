@@ -8,3 +8,5 @@ export { default as EmptyState } from "./EmptyState";
 export { default as Loader } from "./Loader/Loader";
 export { default as StatCard } from "./StatCard/StatCard";
 export { default as Badge } from "./Badge/Badge";
+export { default as Textarea } from "./Textarea/Textarea";
+export { default as StatusBadge } from "./StatusBadge/StatusBadge";

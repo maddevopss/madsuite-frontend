@@ -14,6 +14,7 @@ export { RiTeamFill } from "react-icons/ri";
 export {
   AiOutlineDashboard,
   AiOutlineCar,
+  AiOutlineLeft,
   AiOutlineBarChart,
   AiOutlineFundProjectionScreen,
   AiOutlineSchedule,

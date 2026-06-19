@@ -1,0 +1,37 @@
+.ui-button {
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform var(--transition-fast), opacity var(--transition-fast), background var(--transition-fast);
+}
+
+.ui-button--sm {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+}
+
+.ui-button--md {
+  padding: 10px 14px;
+  font-size: 0.95rem;
+}
+
+.ui-button--primary {
+  background: var(--color-primary);
+  color: var(--color-on-brand);
+}
+
+.ui-button--secondary {
+  background: var(--color-surface-strong);
+  color: var(--color-text-primary);
+}
+
+.ui-button--danger {
+  background: var(--color-danger);
+  color: var(--color-on-brand);
+}
+
+.ui-button:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}

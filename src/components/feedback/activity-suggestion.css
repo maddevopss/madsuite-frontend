@@ -1,0 +1,67 @@
+.activity-suggestion-popup {
+  position: fixed;
+  right: 24px;
+  bottom: 88px;
+  z-index: 9998;
+  display: flex;
+  gap: 12px;
+  width: 340px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-strong);
+  color: var(--color-text-primary);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+}
+
+.activity-suggestion-icon {
+  font-size: 1.8rem;
+}
+
+.activity-suggestion-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.activity-suggestion-content span {
+  font-weight: 700;
+}
+
+.activity-suggestion-content small {
+  color: var(--color-text-muted);
+}
+
+.activity-suggestion-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.activity-suggestion-actions button {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: none;
+  background: var(--color-primary);
+  color: var(--color-on-brand);
+  cursor: pointer;
+  font-size: 0.78rem;
+}
+
+.activity-suggestion-actions button.secondary {
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+}
+
+.activity-suggestion-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--color-surface-strong);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}

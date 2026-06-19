@@ -1,0 +1,148 @@
+.ui-loader {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--color-text-muted);
+}
+
+.ui-loader-label {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+}
+
+.ui-loader-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.ui-skeleton-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ui-skeleton-grid-two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ui-skeleton-card,
+.ui-skeleton-row {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-strong);
+}
+
+.ui-skeleton-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+}
+
+.ui-skeleton-card--metric {
+  min-height: 96px;
+}
+
+.ui-skeleton-card--wide {
+  min-height: 120px;
+  margin-bottom: 8px;
+}
+
+.ui-skeleton-card--panel {
+  min-height: 210px;
+}
+
+.ui-skeleton-row {
+  display: grid;
+  grid-template-columns: 18px minmax(80px, 0.5fr) minmax(180px, 2fr) minmax(120px, 1fr) minmax(70px, 0.5fr) minmax(75px, 0.5fr);
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+}
+
+.ui-skeleton-line,
+.ui-skeleton-chart {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  background: var(--color-surface-muted);
+}
+
+.ui-skeleton-line {
+  width: 70%;
+  height: 12px;
+  border-radius: 999px;
+}
+
+.ui-skeleton-line--dot {
+  width: 12px;
+  height: 12px;
+}
+
+.ui-skeleton-line--short {
+  width: 42%;
+}
+
+.ui-skeleton-line--medium {
+  width: 58%;
+}
+
+.ui-skeleton-line--wide {
+  width: 88%;
+}
+
+.ui-skeleton-line--value {
+  width: 64%;
+  height: 24px;
+}
+
+.ui-skeleton-line--title {
+  width: 38%;
+  height: 32px;
+}
+
+.ui-skeleton-chart {
+  width: 100%;
+  min-height: 150px;
+  border-radius: var(--radius-md);
+}
+
+.ui-skeleton-line::after,
+.ui-skeleton-chart::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--color-text-primary) 10%, transparent),
+    transparent
+  );
+  animation: ui-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes ui-skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (max-width: 900px) {
+  .ui-skeleton-metrics,
+  .ui-skeleton-grid-two {
+    grid-template-columns: 1fr;
+  }
+
+  .ui-skeleton-row {
+    grid-template-columns: 18px 1fr;
+  }
+
+  .ui-loader--table .ui-skeleton-row .ui-skeleton-line:nth-child(n + 4) {
+    display: none;
+  }
+}

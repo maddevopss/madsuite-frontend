@@ -1,0 +1,138 @@
+.estimates-page {
+  padding: 1rem;
+}
+
+.estimates-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2rem;
+}
+
+.estimates-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.estimates-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.view-estimate-content {
+  color: var(--text-color);
+}
+
+.invoice-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.detail-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.detail-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.detail-group .label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.detail-group .value {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.notes-box {
+  background: var(--surface-hover);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  white-space: pre-wrap;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  border: 1px solid var(--border-color);
+}
+
+.table-responsive {
+  overflow-x: auto;
+  margin-top: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.items-table th,
+.items-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.items-table th {
+  background: var(--surface-hover);
+  font-weight: 600;
+  color: var(--text-color-muted);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+}
+
+.items-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.items-table tfoot td {
+  padding: 0.75rem 1rem;
+  border-bottom: none;
+  background: var(--surface-color);
+}
+
+.items-table .total-row td {
+  border-top: 2px solid var(--border-color);
+  font-size: 1.1rem;
+  padding-top: 1rem;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.empty-row {
+  text-align: center;
+  color: var(--text-color-muted);
+  font-style: italic;
+  padding: 2rem !important;
+}
+
+@media (max-width: 768px) {
+  .estimates-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .estimates-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  
+  .invoice-details-grid {
+    grid-template-columns: 1fr;
+  }
+}

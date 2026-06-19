@@ -1,0 +1,87 @@
+.clients-page {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mantient la structure actuelle (mêmes classes que l’existant) */
+.clients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.client-form {
+  display: grid;
+  gap: 12px;
+  max-width: 480px;
+  padding: 18px;
+  margin-bottom: 24px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.clients-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.client-form input {
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.client-form select,
+.client-form textarea {
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font: inherit;
+}
+
+/* Settings spécifique */
+.desktop-privacy-settings {
+  max-width: 680px;
+}
+
+.desktop-privacy-settings label {
+  display: grid;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.desktop-privacy-settings label:has(input[type="checkbox"]) {
+  display: flex;
+  align-items: center;
+}
+
+.desktop-privacy-settings input[type="checkbox"] {
+  width: auto;
+}
+
+.desktop-privacy-settings textarea,
+.desktop-privacy-settings select {
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font: inherit;
+}
+
+.desktop-last-capture {
+  padding: 12px;
+  border-radius: 10px;
+  background: #f3f4f6;
+}
+
+.desktop-last-capture p {
+  margin: 6px 0 0;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+}

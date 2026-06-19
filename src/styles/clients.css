@@ -1,0 +1,206 @@
+.icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 1rem;
+}
+
+.clients-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.clients-header h1 {
+  margin: 0;
+}
+
+.clients-header p {
+  margin-top: 6px;
+  opacity: 0.7;
+}
+
+.client-form {
+  display: grid;
+  gap: 12px;
+  max-width: 480px;
+  padding: 18px;
+  margin-bottom: 24px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.client-form h2 {
+  margin: 0 0 8px;
+}
+
+.client-form input {
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.desktop-privacy-settings {
+  max-width: 680px;
+}
+
+.desktop-privacy-settings label {
+  display: grid;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.desktop-privacy-settings label:has(input[type="checkbox"]) {
+  display: flex;
+  align-items: center;
+}
+
+.desktop-privacy-settings input[type="checkbox"] {
+  width: auto;
+}
+
+.desktop-privacy-settings textarea,
+.desktop-privacy-settings select {
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font: inherit;
+}
+
+.desktop-last-capture {
+  padding: 12px;
+  border-radius: 10px;
+  background: #f3f4f6;
+}
+
+.desktop-last-capture p {
+  margin: 6px 0 0;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn,
+.card-actions button,
+.close-btn {
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 600;
+}
+
+.btn.primary {
+  background: #111827;
+  color: white;
+}
+
+.btn.secondary {
+  background: #e5e7eb;
+}
+
+.clients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.client-card {
+  padding: 18px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.client-card h3 {
+  margin: 0;
+}
+
+.client-card p {
+  margin: 8px 0 0;
+  opacity: 0.75;
+}
+
+.client-stats {
+  display: flex;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.client-stats span {
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  font-size: 13px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.card-actions button {
+  background: #f3f4f6;
+}
+
+.card-actions .danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.client-details {
+  position: fixed;
+  top: 80px;
+  right: 24px;
+  width: 320px;
+  padding: 22px;
+  border-radius: 18px;
+  background: white;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+  z-index: 20;
+}
+
+.close-btn {
+  float: right;
+  background: #f3f4f6;
+}
+
+.danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.client-projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.client-project-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px;
+  border-radius: 10px;
+
+  background: var(--color-background-primary);
+}
+
+.client-project-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.client-project-item span {
+  display: block;
+  color: var(--color-text-secondary);
+  font-size: 0.8rem;
+}

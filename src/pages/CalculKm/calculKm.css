@@ -1,0 +1,124 @@
+.calcul-km-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background-color: #f8fafc;
+  overflow: hidden;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.calcul-km-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.km-hero {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.car-icon-wrapper {
+  background-color: #e0f2fe;
+  color: #0284c7;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px auto;
+}
+
+.km-hero h2 {
+  font-size: 1.5rem;
+  color: #0f172a;
+  margin: 0 0 8px 0;
+  font-weight: 800;
+}
+
+.km-hero p {
+  color: #64748b;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.km-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.form-group-row {
+  display: flex;
+  gap: 16px;
+}
+
+.flex-1 { flex: 1; }
+.flex-2 { flex: 2; }
+
+.km-input {
+  padding: 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  font-size: 1rem;
+  background-color: #f8fafc;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+.km-input:focus {
+  border-color: #0284c7;
+  background-color: #ffffff;
+}
+
+.km-input.large-number {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.total-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f0fdf4;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #bbf7d0;
+}
+
+.total-preview span {
+  color: #166534;
+  font-weight: 600;
+}
+
+.total-amount {
+  font-size: 1.5rem;
+  font-weight: 800 !important;
+}
+
+.km-submit-btn {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+}

@@ -1,0 +1,112 @@
+.sidebar {
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.logo {
+  padding: 0 16px 20px;
+  border-bottom: 0.5px solid var(--color-border-strong);
+  margin-bottom: var(--spacing-xs);
+}
+
+.logo-name {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.logo-sub {
+  color: var(--color-text-muted);
+  margin-top: 2px;
+  margin-bottom: var(--spacing-xs);
+}
+
+.sidebar-user-info {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--spacing-md);
+}
+
+.logout-button {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface-strong);
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.logout-button:hover {
+  background: var(--color-surface-muted);
+}
+
+.nav-section {
+  padding: 0 8px;
+  margin-bottom: 4px;
+}
+
+.nav-label {
+  white-space: nowrap;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.nav-item {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 15px;
+  text-decoration: none;
+  color: var(--color-text-primary);
+  transition: 0.2s ease;
+}
+
+.nav-item:hover {
+  background: var(--color-surface-strong);
+}
+
+.nav-item.active {
+  background: var(--color-surface-strong);
+  color: var(--color-primary);
+}
+
+.nav-item.coming-soon {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.nav-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: currentColor;
+}
+
+.nav-link-text {
+  white-space: nowrap;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: var(--color-success);
+  color: var(--color-on-brand);
+}

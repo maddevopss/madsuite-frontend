@@ -1,0 +1,70 @@
+.modal {
+  width: 400px;
+  max-width: 90%;
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border-tertiary);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  display: grid;
+  gap: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  pointer-events: auto;
+}
+
+.modal input {
+  padding: 10px;
+  border: 1px solid var(--color-border-tertiary);
+  border-radius: var(--radius-md);
+}
+
+.checkbox-row {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  /* display: grid; */
+  place-items: center;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal form {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+}
+
+.modal-actions .btn {
+  padding: 10px 16px;
+}
+
+.modal input,
+.modal select,
+.modal textarea,
+.modal button {
+  pointer-events: auto;
+}
+
+.users-modal-overlay .ts-modal-overlay .modal-backdrop {
+  pointer-events: auto;
+}
+
+.ui-modal {
+  pointer-events: auto;
+}
+
+.ui-modal-body {
+  pointer-events: auto;
+}

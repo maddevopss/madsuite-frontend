@@ -1,0 +1,161 @@
+.kiosk-container {
+  min-height: 100vh;
+  background-color: var(--color-bg-secondary, #f4f5f7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-sans, sans-serif);
+  padding: 20px;
+}
+
+.kiosk-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 450px;
+  padding: 30px;
+  text-align: center;
+}
+
+.kiosk-header h1 {
+  color: var(--color-text-primary, #333);
+  margin-bottom: 20px;
+}
+
+.kiosk-header p {
+  color: var(--color-text-secondary, #666);
+  margin-bottom: 30px;
+}
+
+.kiosk-btn {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.kiosk-btn.btn-primary {
+  background-color: var(--color-primary, #4f46e5);
+  color: white;
+}
+
+.kiosk-btn.btn-primary:hover {
+  background-color: var(--color-primary-dark, #4338ca);
+}
+
+.kiosk-btn.btn-success {
+  background-color: #10b981;
+  color: white;
+  padding: 20px;
+  font-size: 1.5rem;
+}
+
+.kiosk-btn.btn-danger {
+  background-color: #ef4444;
+  color: white;
+  padding: 20px;
+  font-size: 1.5rem;
+}
+
+.kiosk-btn.btn-secondary {
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+.kiosk-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.kiosk-input {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  text-align: center;
+  letter-spacing: 5px;
+}
+
+.kiosk-select {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  background-color: white;
+}
+
+.kiosk-pinpad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.pin-btn {
+  background-color: #f3f4f6;
+  border: none;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #374151;
+  cursor: pointer;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.1s;
+}
+
+.pin-btn:active {
+  background-color: #e5e7eb;
+}
+
+.pin-btn.action {
+  background-color: transparent;
+  color: #ef4444;
+  font-size: 1.2rem;
+}
+
+.clock-display {
+  margin-bottom: 30px;
+}
+
+.time-huge {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #111827;
+  font-variant-numeric: tabular-nums;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.status-badge.active {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge.idle {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}

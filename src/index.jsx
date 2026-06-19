@@ -1,0 +1,46 @@
+import React from "react";
+import ReactDOM from "react-dom/client";
+
+import "./styles/global.css";
+import "./components/layout/header.css";
+
+import App from "./pages/App";
+import { AuthProvider } from "./api/authContext";
+import { TimerProvider } from "./TimerContext";
+import { RefreshProvider } from "./RefreshContext";
+import { ToastProvider } from "./ToastContext";
+import { ActivitySuggestionProvider } from "./components/activity-intelligence/ActivitySuggestionContext";
+import { ThemeProvider } from "./ThemeContext";
+import { ModulesProvider } from "./hooks/useModules";
+
+// Injecter le CSP dynamiquement avant le rendu React.
+(() => {
+  const apiUrl = new URL(import.meta.env.VITE_API_URL || "http://localhost:5000").origin;
+
+  const meta = document.createElement("meta");
+  meta.httpEquiv = "Content-Security-Policy";
+  meta.content = `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' ${apiUrl};`;
+  document.head.insertBefore(meta, document.head.firstChild);
+})();
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+root.render(
+  <React.StrictMode>
+    <ThemeProvider>
+      <AuthProvider>
+        <ModulesProvider>
+        <RefreshProvider>
+          <ToastProvider>
+            <TimerProvider>
+              <ActivitySuggestionProvider>
+                <App />
+              </ActivitySuggestionProvider>
+            </TimerProvider>
+          </ToastProvider>
+        </RefreshProvider>
+        </ModulesProvider>
+      </AuthProvider>
+    </ThemeProvider>
+  </React.StrictMode>,
+);

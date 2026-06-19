@@ -1,0 +1,114 @@
+.billing-assistant-container {
+  padding: var(--spacing-md);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.date-picker input {
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-subtle);
+  font-family: inherit;
+  background: var(--color-surface-strong);
+  color: var(--color-text-primary);
+}
+
+.suggestions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.suggestion-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+}
+.suggestion-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.suggestion-info h3 {
+  margin: 5px 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+.app-tag {
+  background: #f0f2f5;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #666;
+}
+.duration {
+  color: var(--color-primary);
+  font-weight: 600;
+  margin: 0;
+}
+
+.suggestion-action {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+}
+.project-badge {
+  font-size: 0.9rem;
+  color: #444;
+}
+.confidence {
+  color: #27ae60;
+  font-weight: bold;
+  margin-left: 5px;
+}
+.no-suggestion {
+  color: #e67e22;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn-primary:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.alert {
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.alert.success {
+  background: #d4edda;
+  color: #155724;
+}
+.alert.error {
+  background: #f8d7da;
+  color: #721c24;
+}

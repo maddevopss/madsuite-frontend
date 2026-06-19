@@ -2,7 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "./login.schema";
-import Input from "../../components/UI/Input";
+import Input from "../../components/ui/Input/Input";
 import authService from "../../api/authService";
 
 /**

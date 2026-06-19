@@ -2,8 +2,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addUserSchema } from "./user.schema";
-import Input from "../../components/UI/Input";
-import FormField from "../../components/UI/FormField";
+import Input from "../../components/ui/Input/Input";
+import FormField from "../../components/ui/FormField";
 
 const AddUserForm = ({ onSubmit, onCancel }) => {
   const {

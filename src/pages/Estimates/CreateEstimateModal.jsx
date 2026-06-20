@@ -1,4 +1,4 @@
-import { useState,  useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Modal, Button, Input, Select, Textarea } from "../../components/ui";
 import { AiOutlinePlus, AiOutlineDelete } from "react-icons/ai";
 

@@ -1,4 +1,4 @@
-import { useState,  useMemo, useState, memo } from "react";
+import { useState, useMemo, memo } from "react";
 import { Button, EmptyState } from "../../components/ui";
 
 function normalize(s) {

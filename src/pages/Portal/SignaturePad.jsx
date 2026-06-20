@@ -1,4 +1,4 @@
-import { useState,  useRef, useState, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 export default function SignaturePad({ onConfirm, onClear }) {
   const canvasRef = useRef(null);

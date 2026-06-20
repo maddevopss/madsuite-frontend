@@ -1,4 +1,4 @@
-import { useState,  useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button, Card, Input, Modal, Loader } from "../../components/ui";
 import api from "../../api/api";
 import { useToast } from "../../ToastContext";

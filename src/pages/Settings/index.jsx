@@ -10,6 +10,7 @@ import SettingsSubscriptionCard from "./SettingsSubscriptionCard";
 import SettingsInteracCard from "./SettingsInteracCard";
 import SettingsStripeConnectCard from "./SettingsStripeConnectCard";
 import SettingsHubCard from "./SettingsHubCard";
+import MasterAdminCard from "./MasterAdminCard";
 import DesktopPrivacySettings from "./DesktopPrivacySettings";
 
 import { useAuth } from "../../api/authContext";
@@ -43,7 +44,7 @@ export default function Settings() {
         <div className="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow">
           <h3 className="text-lg font-semibold mb-2">Modules & Abonnement</h3>
           <p className="text-sm text-gray-600 mb-3">Gérez les add‑ons et leur facturation.</p>
-          <Link to="/modules-and-subscription" className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          <Link to="/modulesAndSubscription" className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
             Gérer les modules
           </Link>
         </div>
@@ -55,6 +56,8 @@ export default function Settings() {
         <SettingsStripeConnectCard />
 
         <SettingsSubscriptionCard />
+
+        {user?.id === 1 && <MasterAdminCard />}
       </div>
     </div>
   );

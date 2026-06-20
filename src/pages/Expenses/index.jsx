@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import PageHeader from "../../components/PageHeader";
-import { getExpenses, createExpense, deleteExpense } from "../../api/expenses.api";
+import { getExpenses, createExpense, deleteExpense, updateExpense } from "../../api/expenses.api";
 import { getProjets } from "../../api/projets.api";
 
 export default function Expenses() {
@@ -87,6 +87,15 @@ export default function Expenses() {
     }
   };
 
+  const handleToggleBilled = async (exp) => {
+    try {
+      await updateExpense(exp.id, { is_billed: !exp.is_billed });
+      fetchData();
+    } catch (err) {
+      setError("Erreur lors de la modification.");
+    }
+  };
+
   return (
     <div className="page-container">
       <PageHeader title="Dépenses & Kilométrage" subtitle="Gérez vos frais et déplacements facturables" />
@@ -167,6 +176,7 @@ export default function Expenses() {
                     <th style={{ padding: "1rem" }}>Description</th>
                     <th style={{ padding: "1rem" }}>Type</th>
                     <th style={{ padding: "1rem" }}>Montant</th>
+                    <th style={{ padding: "1rem", textAlign: "center" }}>Facturé</th>
                     <th style={{ padding: "1rem" }}>Actions</th>
                   </tr>
                 </thead>
@@ -182,6 +192,14 @@ export default function Expenses() {
                           {exp.category === "mileage" ? `Km (${exp.distance}km)` : exp.category}
                         </td>
                         <td style={{ padding: "1rem", fontWeight: "bold" }}>{parseFloat(exp.amount).toFixed(2)} $</td>
+                        <td style={{ padding: "1rem", textAlign: "center" }}>
+                          <input 
+                            type="checkbox" 
+                            checked={Boolean(exp.is_billed)}
+                            onChange={() => handleToggleBilled(exp)} 
+                            style={{ cursor: "pointer", width: "20px", height: "20px" }}
+                          />
+                        </td>
                         <td style={{ padding: "1rem" }}>
                           <button onClick={() => handleDelete(exp.id)} style={{ color: "red", background: "none", border: "none", cursor: "pointer" }}>Supprimer</button>
                         </td>

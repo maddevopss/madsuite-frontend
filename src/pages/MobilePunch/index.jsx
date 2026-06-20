@@ -68,9 +68,10 @@ export default function MobilePunch() {
   const handlePunchOut = async () => {
     setLoading(true);
     try {
-      await api.post("/timer/stop", {
-        description: description || activeTimer.description,
-      });
+      if (description && description !== activeTimer.description) {
+        await api.patch("/timer/active/note", { note: description });
+      }
+      await api.patch("/timer/stop");
       showToast("Punch Out enregistré !", "success");
       setDescription("");
       await fetchActiveTimer();

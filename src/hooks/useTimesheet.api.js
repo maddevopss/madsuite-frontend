@@ -10,8 +10,13 @@ export const loadTimesheetEntries = async (queryString) => {
   const res = await api.get(`/timesheet/entries?${queryString}`);
 
   return {
-    data: res.data || [],
-    pagination: res.data.pagination || null,
+    data: res.data?.entries || [],
+    pagination: {
+      page: res.data?.page || 1,
+      limit: res.data?.limit || 50,
+      total: res.data?.total || 0,
+      totalPages: res.data?.totalPages || 1
+    },
   };
 };
 

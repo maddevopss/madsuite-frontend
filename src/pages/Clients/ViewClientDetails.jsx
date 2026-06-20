@@ -7,9 +7,14 @@ function ViewClientDetails({ client, onClose }) {
   return (
     <>
       <h3>{client.nom}</h3>
+      {client.contact_name && <p><strong>Personne ressource :</strong> {client.contact_name}</p>}
+      {client.email && <p><strong>Courriel :</strong> {client.email}</p>}
+      {client.phone && <p><strong>Téléphone :</strong> {client.phone}</p>}
+      {client.adresse && <p><strong>Adresse :</strong> {client.adresse}</p>}
+      {client.notes && <p><strong>Notes :</strong> {client.notes}</p>}
 
       <p>
-        Taux défaut :{" "}
+        <strong>Taux défaut :</strong>{" "}
         {Number(client.hourly_rate_defaut || 0).toFixed(2)}$ / h
       </p>
 

@@ -24,6 +24,38 @@ function EditClientForm({ client, editForm, setEditForm, onSubmit, onCancel }) {
         onChange={(e) => updateField("nom", e.target.value)}
         required
       />
+      
+      <Input
+        placeholder="Personne ressource"
+        value={editForm.contact_name || ""}
+        onChange={(e) => updateField("contact_name", e.target.value)}
+      />
+
+      <div className="form-row" style={{ display: "flex", gap: "1rem" }}>
+        <Input
+          type="email"
+          placeholder="Email"
+          value={editForm.email || ""}
+          onChange={(e) => updateField("email", e.target.value)}
+        />
+        <Input
+          placeholder="Téléphone"
+          value={editForm.phone || ""}
+          onChange={(e) => updateField("phone", e.target.value)}
+        />
+      </div>
+
+      <Input
+        placeholder="Adresse complète"
+        value={editForm.adresse || ""}
+        onChange={(e) => updateField("adresse", e.target.value)}
+      />
+      
+      <Input
+        placeholder="Notes"
+        value={editForm.notes || ""}
+        onChange={(e) => updateField("notes", e.target.value)}
+      />
 
       <Input
         type="number"

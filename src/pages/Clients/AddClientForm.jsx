@@ -23,6 +23,7 @@ function AddClientForm({ onSubmit, onCancel, initialData }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="standard-form">
       <Input label="Nom de l'entreprise ou client" placeholder="Ex: Acme Corp" {...register("nom")} error={errors.nom} />
+      <Input label="Personne ressource" placeholder="Ex: Jean Dupont" {...register("contact_name")} error={errors.contact_name} />
 
       <div className="form-row" style={{ display: "flex", gap: "1rem" }}>
         <Input

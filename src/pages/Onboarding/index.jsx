@@ -78,7 +78,15 @@ export default function Onboarding() {
             >
               {loading ? "Redirection sécurisée..." : "Activer mon compte"}
             </Button>
-            <div className="secure-badge">
+            
+            <button 
+              onClick={() => window.location.href = "/dashboard"}
+              className="mt-4 text-sm text-gray-500 hover:text-gray-700 underline bg-transparent border-none cursor-pointer"
+            >
+              Passer cette étape (Compléter plus tard)
+            </button>
+
+            <div className="secure-badge mt-4">
               🔒 Paiement sécurisé par Stripe
             </div>
           </div>

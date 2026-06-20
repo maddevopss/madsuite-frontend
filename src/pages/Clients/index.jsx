@@ -68,6 +68,11 @@ export default function Clients() {
       setEditForm({
         nom: client?.nom || "",
         hourly_rate_defaut: client?.hourly_rate_defaut || "",
+        email: client?.email || "",
+        phone: client?.phone || "",
+        contact_name: client?.contact_name || "",
+        adresse: client?.adresse || "",
+        notes: client?.notes || "",
       });
     },
     [editModal],

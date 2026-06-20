@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useCallback, useContext } from 'react';
 import api from '../api/api';
+import { useAuth } from '../api/authContext';
 
 const ModulesContext = createContext(null);
 
@@ -8,11 +9,18 @@ const ModulesContext = createContext(null);
  * À placer dans l'arbre React, sous AuthProvider.
  */
 export function ModulesProvider({ children }) {
+  const { isAuthenticated, isAuthLoading } = useAuth();
   const [modules, setModules] = useState([]);
   const [planType, setPlanType] = useState('free');
   const [loading, setLoading] = useState(true);
 
   const fetchModules = useCallback(async () => {
+    if (!isAuthenticated) {
+      setModules([]);
+      setPlanType('free');
+      setLoading(false);
+      return;
+    }
     try {
       const res = await api.get('/organisation/modules');
       setModules(res.data.data.modules || []);
@@ -23,11 +31,13 @@ export function ModulesProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
-    fetchModules();
-  }, [fetchModules]);
+    if (!isAuthLoading) {
+      fetchModules();
+    }
+  }, [fetchModules, isAuthLoading]);
 
   /**
    * Vérifie si un module est actif pour l'organisation courante.

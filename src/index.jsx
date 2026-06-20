@@ -15,12 +15,21 @@ import { ModulesProvider } from "./hooks/useModules";
 
 // Injecter le CSP dynamiquement avant le rendu React.
 (() => {
-  const apiUrl = new URL(import.meta.env.VITE_API_URL || "http://localhost:5000").origin;
+  try {
+    const raw = import.meta.env.VITE_API_URL || "/api";
+    // Si l'URL est relative (ex: "/api"), connect-src 'self' suffit déjà
+    const isRelative = raw.startsWith("/");
+    const apiOrigin = isRelative ? "" : new URL(raw).origin;
 
-  const meta = document.createElement("meta");
-  meta.httpEquiv = "Content-Security-Policy";
-  meta.content = `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' ${apiUrl};`;
-  document.head.insertBefore(meta, document.head.firstChild);
+    const connectSrc = apiOrigin ? `'self' ${apiOrigin}` : "'self'";
+
+    const meta = document.createElement("meta");
+    meta.httpEquiv = "Content-Security-Policy";
+    meta.content = `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src ${connectSrc};`;
+    document.head.insertBefore(meta, document.head.firstChild);
+  } catch {
+    // CSP injection failed — non-blocking
+  }
 })();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

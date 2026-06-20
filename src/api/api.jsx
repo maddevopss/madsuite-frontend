@@ -34,14 +34,17 @@ const redirectToLogin = () => {
   localStorage.removeItem("user");
 
   if (typeof window !== "undefined" && window.location) {
+    const isAlreadyOnLogin = window.location.pathname === "/login";
     try {
-      sessionStorage.setItem("auth_notice", "Votre session a expire. Reconnectez-vous pour continuer.");
+      if (!isAlreadyOnLogin) {
+        sessionStorage.setItem("auth_notice", "Votre session a expire. Reconnectez-vous pour continuer.");
+      }
       window.dispatchEvent(new CustomEvent("auth:expired"));
     } catch {
       // ignore storage/event errors
     }
 
-    if (process.env.NODE_ENV !== "test") {
+    if (process.env.NODE_ENV !== "test" && !isAlreadyOnLogin) {
       window.location.replace("/login");
     }
   }
@@ -242,7 +245,7 @@ api.interceptors.response.use(
     // Évite de rafraîchir pendant un refresh ou un logout.
     const originalUrl = originalRequest.url || "";
 
-    if (isAlreadyOnLogin || originalUrl.includes("/refresh") || originalUrl.includes("/logout")) {
+    if (isAlreadyOnLogin || originalUrl.includes("/refresh") || originalUrl.includes("/logout") || originalRequest._retry) {
       redirectToLogin();
       return Promise.reject(error);
     }

@@ -48,12 +48,6 @@ function EditProjectForm({ project, clients = [], editForm, setEditForm, onSubmi
 
       <Input type="date" value={editForm.date_fin || ""} onChange={(e) => updateField("date_fin", e.target.value)} />
 
-      <Input
-        type="number"
-        placeholder="Budget global (obsolète)"
-        value={editForm.budget || ""}
-        onChange={(e) => updateField("budget", e.target.value)}
-      />
 
       <div style={{ display: "flex", gap: "1rem" }}>
         <Input

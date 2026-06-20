@@ -66,7 +66,7 @@ export default function CalculKm() {
   const fetchProjects = async () => {
     try {
       const res = await getProjets();
-      setProjets(res.data || []);
+      setProjets(Array.isArray(res) ? res : (res?.data || []));
     } catch (err) {
       console.error(err);
       showToast("Erreur lors du chargement des projets", "error");
@@ -219,7 +219,7 @@ export default function CalculKm() {
     try {
       const finalAmount = parseFloat((finalDistance * parseFloat(formData.rate_per_unit)).toFixed(2));
       await createExpense({
-        projet_id: formData.projet_id,
+        projet_id: parseInt(formData.projet_id, 10),
         category: "mileage",
         amount: finalAmount,
         total_amount: finalAmount,

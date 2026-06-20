@@ -12,7 +12,7 @@ export function useEstimates() {
     setLoading(true);
     try {
       const res = await api.getEstimates(params);
-      setEstimates(res.data || []);
+      setEstimates(Array.isArray(res) ? res : (res?.data || []));
     } catch (err) {
       showToast(getApiErrorMessage(err, "Erreur lors du chargement des soumissions."), "error");
     } finally {

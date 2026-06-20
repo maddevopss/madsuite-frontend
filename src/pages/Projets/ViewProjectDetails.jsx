@@ -50,8 +50,13 @@ function ViewProjectDetails({ project, onClose }) {
         </div>
 
         <div>
-          <span>Budget</span>
-          <strong>{Number(project.budget || 0).toFixed(2)}$</strong>
+          <span>Budget ($)</span>
+          <strong>{Number(project.budget_amount || project.budget || 0).toFixed(2)}$</strong>
+        </div>
+
+        <div>
+          <span>Budget (Heures)</span>
+          <strong>{Number(project.budget_hours || 0).toFixed(1)} h</strong>
         </div>
 
         <div>

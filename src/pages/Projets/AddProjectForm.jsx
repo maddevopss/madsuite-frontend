@@ -60,12 +60,6 @@ function AddProjectForm({ clients = [], form = emptyForm, setForm, onSubmit, onC
 
       <Input type="date" value={safeForm.date_fin || ""} onChange={(e) => updateField("date_fin", e.target.value)} />
 
-      <Input
-        type="number"
-        placeholder="Budget global (obsolète, gardé pour rétrocompatibilité)"
-        value={safeForm.budget || ""}
-        onChange={(e) => updateField("budget", e.target.value)}
-      />
 
       <div style={{ display: "flex", gap: "1rem" }}>
         <Input

@@ -88,6 +88,11 @@ export default function App() {
                 path="/expenses"
                 element={<Expenses />}
               />
+              
+              <Route 
+                path="/modules-and-subscription" 
+                element={<ModulesAndSubscription />} 
+              />
 
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Route>

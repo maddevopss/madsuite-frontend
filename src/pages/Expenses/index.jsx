@@ -31,8 +31,8 @@ export default function Expenses() {
         getExpenses(),
         getProjets()
       ]);
-      setExpenses(expRes.data || []);
-      setProjets(projRes.data || []);
+      setExpenses(Array.isArray(expRes) ? expRes : (expRes?.data || []));
+      setProjets(Array.isArray(projRes) ? projRes : (projRes?.data || []));
     } catch (err) {
       setError("Erreur lors du chargement des données.");
     } finally {
@@ -58,6 +58,7 @@ export default function Expenses() {
 
       await createExpense({
         ...formData,
+        projet_id: parseInt(formData.projet_id, 10),
         amount: finalAmount,
         total_amount: finalAmount,
         distance: formData.distance ? parseFloat(formData.distance) : null,
@@ -171,7 +172,7 @@ export default function Expenses() {
                 </thead>
                 <tbody>
                   {expenses.map((exp) => {
-                    const projet = projets.find((p) => p.id === exp.projet_id);
+                    const projet = projets.find((p) => String(p.id) === String(exp.projet_id));
                     return (
                       <tr key={exp.id} style={{ borderTop: "1px solid #eee" }}>
                         <td style={{ padding: "1rem" }}>{new Date(exp.expense_date).toLocaleDateString()}</td>

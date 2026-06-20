@@ -48,11 +48,11 @@ export default function CreateEstimateModal({ show, clients, loading, initialCli
     if (validItems.length === 0) return;
 
     onCreate({
-      clientId: Number(clientId),
-      issueDate,
-      validUntil: validUntil || null,
+      client_id: Number(clientId),
+      issue_date: issueDate,
+      valid_until: validUntil || undefined,
       notes,
-      taxRate: Number(taxRate),
+      tax_rate: Number(taxRate),
       items: validItems
     });
   };

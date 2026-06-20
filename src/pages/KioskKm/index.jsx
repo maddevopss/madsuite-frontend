@@ -1,3 +1,4 @@
+import { useState } from "react";
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../api/api";
@@ -73,9 +74,9 @@ export default function KioskKm() {
     try {
       setLoading(true);
       const res = await api.get(`/punch/kiosk/${kioskToken}`);
-      setOrg(res.data.data.organisation);
-      setEmployes(res.data.data.employes);
-      setProjets(res.data.data.projets);
+      setOrg(res.data.organisation);
+      setEmployes(res.data.employes);
+      setProjets(res.data.projets);
     } catch (err) {
       setError("Ce lien Kiosque est invalide ou expiré.");
     } finally {

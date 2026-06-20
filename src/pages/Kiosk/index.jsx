@@ -1,3 +1,4 @@
+import { useState } from "react";
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../../api/api";
@@ -29,11 +30,11 @@ export default function Kiosk() {
     try {
       setLoading(true);
       const res = await api.get(`/punch/kiosk/${kioskToken}`);
-      setOrg(res.data.data.organisation);
-      setEmployes(res.data.data.employes);
-      setProjets(res.data.data.projets);
-      if (res.data.data.projets.length > 0) {
-        setSelectedProjectId(res.data.data.projets[0].id);
+      setOrg(res.data.organisation);
+      setEmployes(res.data.employes);
+      setProjets(res.data.projets);
+      if (res.data.projets.length > 0) {
+        setSelectedProjectId(res.data.projets[0].id);
       }
     } catch (err) {
       setError("Ce lien Kiosque est invalide ou expiré.");
@@ -50,7 +51,7 @@ export default function Kiosk() {
         utilisateur_id: selectedUserId,
         pin: currentPin
       });
-      setActiveTimer(res.data.data.active_timer);
+      setActiveTimer(res.data.active_timer);
       setStep("DASHBOARD");
     } catch (err) {
       setError("NIP invalide. Veuillez réessayer.");

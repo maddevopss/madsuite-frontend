@@ -1,3 +1,4 @@
+import { useState } from "react";
 // frontend/src/components/HubTabs.jsx
 import React from "react";
 import "../styles/hub.css";

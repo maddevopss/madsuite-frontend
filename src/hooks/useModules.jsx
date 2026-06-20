@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useCallback, useContext } from 'react';
+import { useState,  createContext, useState, useEffect, useCallback, useContext } from 'react';
 import api from '../api/api';
 import { useAuth } from '../api/authContext';
 
@@ -23,8 +23,8 @@ export function ModulesProvider({ children }) {
     }
     try {
       const res = await api.get('/organisation/modules');
-      setModules(res.data.data.modules || []);
-      setPlanType(res.data.data.plan_type || 'free');
+      setModules(res.data.modules || []);
+      setPlanType(res.data.plan_type || 'free');
     } catch (err) {
       // Silently fail — user might not be logged in
       console.warn('Could not load modules:', err.message);

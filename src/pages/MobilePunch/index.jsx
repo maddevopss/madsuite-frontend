@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState,  useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../api/authContext";
 import api from "../../api/api";
@@ -24,8 +24,8 @@ export default function MobilePunch() {
   const fetchActiveTimer = async () => {
     try {
       const res = await api.get("/timer/active");
-      if (res.data.data) {
-        setActiveTimer(res.data.data);
+      if (res.data) {
+        setActiveTimer(res.data);
       } else {
         setActiveTimer(null);
       }
@@ -38,7 +38,7 @@ export default function MobilePunch() {
     try {
       const res = await api.get("/projets");
       // Trier par ID décroissant pour avoir les plus récents en premier
-      setProjects(res.data.data || []);
+      setProjects(res.data || []);
     } catch (err) {
       console.error(err);
     }

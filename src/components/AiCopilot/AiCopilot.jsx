@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState,  useState, useRef, useEffect } from "react";
 import api from "../../api/api";
 import "./AiCopilot.css";
 import { Button } from "../ui";

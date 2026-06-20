@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import api from '../../api/api';
 import { useToast } from '../../ToastContext';
 import { useAuth } from '../../api/authContext';
-import { loadStripe } from '@stripe/stripe-js';
+// @stripe/stripe-js loaded dynamically in handleCheckout (Planned module)
 
 export default function ModulesAndSubscription() {
   const { user } = useAuth();
@@ -53,10 +53,11 @@ export default function ModulesAndSubscription() {
 
   const handleCheckout = async (moduleKey) => {
     try {
-      // Request a checkout session from the backend
       const response = await api.post(`/organisation/modules/${moduleKey}/checkout`);
       const checkoutSessionId = response.data?.data?.checkoutSessionId || response.data?.checkoutSessionId;
-      const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+      // Dynamic import to avoid build-time dependency on @stripe/stripe-js
+      const { loadStripe } = await import('@stripe/stripe-js');
+      const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
       const { error } = await stripe.redirectToCheckout({ sessionId: checkoutSessionId });
       if (error) {
         showToast(error.message, 'error');

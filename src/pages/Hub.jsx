@@ -22,7 +22,7 @@ const Hub = () => {
 
   useEffect(() => {
     // Load initial data
-    fetch("/api/hub/projects")
+    fetch(`${import.meta.env.VITE_API_URL}/hub/projects`)
       .then((r) => r.json())
       .then(setProjects);
     // TODO: fetch other collections similarly

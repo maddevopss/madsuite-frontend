@@ -11,10 +11,6 @@ export default defineConfig({
   build: {
     outDir: "build",
   },
-  define: {
-    // Inject the API URL dynamically. If it's on Vercel and hosted together, `/api` is best.
-    "import.meta.env.VITE_API_URL": JSON.stringify(process.env.VITE_API_URL || "/api"),
-  },
   server: {
     port: 3000,
     strictPort: true,

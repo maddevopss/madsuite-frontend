@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import api from "../../api/api";
 import "../Kiosk/Kiosk.css"; // Réutilisation des styles Kiosk
 
+
 // Haversine
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
   const R = 6371;

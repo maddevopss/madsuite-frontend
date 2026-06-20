@@ -4,7 +4,6 @@ import PageHeader from "../../components/PageHeader";
 import { getExpenses, createExpense, deleteExpense } from "../../api/expenses.api";
 import { getProjets } from "../../api/projets.api";
 
-
 export default function Expenses() {
   const [expenses, setExpenses] = useState([]);
   const [projets, setProjets] = useState([]);

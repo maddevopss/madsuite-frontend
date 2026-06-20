@@ -195,13 +195,17 @@ const refreshTokenIfNeeded = async () => {
 api.interceptors.request.use(async (config) => {
   let token = getAccessToken();
 
-  // Éviter de boucler sur la requête de refresh elle-même
+  // Routes publiques/auth : pas besoin de refresh préventif
   const requestUrl = config?.url || "";
-  const isRefreshRequest = requestUrl.includes("/refresh");
+  const isAuthRoute =
+    requestUrl.includes("/refresh") ||
+    requestUrl.includes("/login") ||
+    requestUrl.includes("/signup") ||
+    requestUrl.includes("/logout");
 
   config.headers ||= {};
 
-  if (token && !isRefreshRequest) {
+  if (token && !isAuthRoute) {
     // Si le token est expiré ou va bientôt l'être, on refresh AVANT d'envoyer
     if (isTokenExpired(token)) {
       token = await refreshTokenIfNeeded();

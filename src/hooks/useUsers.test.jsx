@@ -2,6 +2,19 @@ import { renderHook, act } from "@testing-library/react";
 
 import { useUsers } from "./useUsers";
 
+// helpers/js imports are hoisted, so we can import after mocks
+import {
+  loadUsersList,
+  loadTimesheetProjets,
+  loadUserHistoryEntries,
+  createUserRequest,
+  deleteUserRequest,
+  changeUserPasswordRequest,
+  updateHistoryEntryRequest,
+} from "./useUsers.api";
+
+import { validateCreateUserPayload, normalizePassword } from "./useUsers.helpers";
+
 // --- Mocks ---
 const mockConfirm = jest.fn();
 const mockShowToast = jest.fn();
@@ -43,19 +56,6 @@ jest.mock("./useUsers.helpers", () => ({
   getEmptyEditForm: jest.fn(() => ({ projet_id: "" })),
   buildHistoryEntryPayload: jest.fn((form) => form),
 }));
-
-// helpers/js imports are hoisted, so we can import after mocks
-import {
-  loadUsersList,
-  loadTimesheetProjets,
-  loadUserHistoryEntries,
-  createUserRequest,
-  deleteUserRequest,
-  changeUserPasswordRequest,
-  updateHistoryEntryRequest,
-} from "./useUsers.api";
-
-import { validateCreateUserPayload, normalizePassword } from "./useUsers.helpers";
 
 describe("useUsers hook", () => {
   beforeEach(() => {

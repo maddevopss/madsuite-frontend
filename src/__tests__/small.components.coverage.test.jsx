@@ -5,6 +5,8 @@ import EmptyState from "../components/ui/EmptyState";
 import PageHeader from "../components/PageHeader/PageHeader";
 import StatCard from "../components/ui/StatCard/StatCard";
 
+import Layout from "../components/Layout";
+
 jest.mock("../routes/ProtectedRoute", () => {
   return function MockProtectedRoute({ children }) {
     return <div data-testid="protected-route">{children}</div>;
@@ -17,8 +19,6 @@ jest.mock(
   }),
   { virtual: true },
 );
-
-import Layout from "../components/Layout";
 
 jest.mock("../components/Header", () => () => <header>Header mock</header>);
 jest.mock("../components/Sidebar", () => () => <aside>Sidebar mock</aside>);

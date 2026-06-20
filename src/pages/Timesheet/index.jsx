@@ -42,6 +42,7 @@ export default function Timesheet() {
     toggleStatus,
     deleteEntry,
     saveNewEntry,
+    setAddForm,
     saveEditEntry,
     todayStats,
     groupedEntries,

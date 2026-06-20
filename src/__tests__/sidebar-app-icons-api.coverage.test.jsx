@@ -1,5 +1,16 @@
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 
+import App from "../pages/App";
+import Sidebar from "../components/Sidebar";
+import DashboardIcon from "../assets/Icon/DashboardIcon";
+import KmIcon from "../assets/Icon/KmIcon";
+import MobpunchIcon from "../assets/Icon/MobpunchIcon";
+import PauseIcon from "../assets/Icon/PauseIcon";
+import PlayIcon from "../assets/Icon/Play";
+import ReportsIcon from "../assets/Icon/ReportsIcon";
+import TimeIcon from "../assets/Icon/TimeIcon";
+import UserIcon from "../assets/Icon/UserIcon";
+
 const mockOnLogout = jest.fn();
 let mockAuthUser = { nom: "Admin MAD", role: "admin" };
 
@@ -56,17 +67,6 @@ jest.mock("../pages/Settings", () => () => <div>Settings mock</div>);
 jest.mock("../pages/Invoices", () => () => <div>Invoices mock</div>);
 jest.mock("../pages/Innovation/Innovation", () => () => <div>Innovation mock</div>);
 jest.mock("../components/soon", () => ({ title }) => <div>{title}</div>);
-
-import App from "../pages/App";
-import Sidebar from "../components/Sidebar";
-import DashboardIcon from "../assets/Icon/DashboardIcon";
-import KmIcon from "../assets/Icon/KmIcon";
-import MobpunchIcon from "../assets/Icon/MobpunchIcon";
-import PauseIcon from "../assets/Icon/PauseIcon";
-import PlayIcon from "../assets/Icon/Play";
-import ReportsIcon from "../assets/Icon/ReportsIcon";
-import TimeIcon from "../assets/Icon/TimeIcon";
-import UserIcon from "../assets/Icon/UserIcon";
 
 describe("sidebar, app and icons coverage", () => {
   beforeEach(() => {

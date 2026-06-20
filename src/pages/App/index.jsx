@@ -4,6 +4,11 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "../../api/authContext";
 import { env } from "../../env";
 
+import Layout from "../../components/Layout";
+import ProtectedRoute from "../../routes/ProtectedRoute";
+import ComingSoon from "../../components/soon";
+import ModuleGate from "../../components/ModuleGate";
+
 const Landing = React.lazy(() => import("../Landing"));
 const Signup = React.lazy(() => import("../Signup"));
 const Login = React.lazy(() => import("../Login"));
@@ -26,11 +31,6 @@ const CalculKm = React.lazy(() => import("../CalculKm/index.jsx"));
 const Kiosk = React.lazy(() => import("../Kiosk/index.jsx"));
 const KioskKm = React.lazy(() => import("../KioskKm/index.jsx"));
 const ModulesAndSubscription = React.lazy(() => import("../ModulesAndSubscription/index.jsx"));
-
-import Layout from "../../components/Layout";
-import ProtectedRoute from "../../routes/ProtectedRoute";
-import ComingSoon from "../../components/soon";
-import ModuleGate from "../../components/ModuleGate";
 
 export default function App() {
   const { user } = useAuth();

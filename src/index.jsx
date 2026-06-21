@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import "./styles/global.css";
 import "./components/layout/header.css";
 
@@ -13,11 +15,12 @@ import { ActivitySuggestionProvider } from "./components/activity-intelligence/A
 import { ThemeProvider } from "./ThemeContext";
 import { ModulesProvider } from "./hooks/useModules";
 
-// Injecter le CSP dynamiquement avant le rendu React.
+const queryClient = new QueryClient();
+
+// CSP injection (tu peux laisser ça)
 (() => {
   try {
     const raw = import.meta.env.VITE_API_URL || "/api";
-    // Si l'URL est relative (ex: "/api"), connect-src 'self' suffit déjà
     const isRelative = raw.startsWith("/");
     const apiOrigin = isRelative ? "" : new URL(raw).origin;
 
@@ -27,29 +30,29 @@ import { ModulesProvider } from "./hooks/useModules";
     meta.httpEquiv = "Content-Security-Policy";
     meta.content = `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src ${connectSrc};`;
     document.head.insertBefore(meta, document.head.firstChild);
-  } catch {
-    // CSP injection failed — non-blocking
-  }
+  } catch {}
 })();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
-    <ThemeProvider>
-      <AuthProvider>
-        <ModulesProvider>
-        <RefreshProvider>
-          <ToastProvider>
-            <TimerProvider>
-              <ActivitySuggestionProvider>
-                <App />
-              </ActivitySuggestionProvider>
-            </TimerProvider>
-          </ToastProvider>
-        </RefreshProvider>
-        </ModulesProvider>
-      </AuthProvider>
-    </ThemeProvider>
-  </React.StrictMode>,
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <AuthProvider>
+          <ModulesProvider>
+            <RefreshProvider>
+              <ToastProvider>
+                <TimerProvider>
+                  <ActivitySuggestionProvider>
+                    <App />
+                  </ActivitySuggestionProvider>
+                </TimerProvider>
+              </ToastProvider>
+            </RefreshProvider>
+          </ModulesProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  </React.StrictMode>
 );

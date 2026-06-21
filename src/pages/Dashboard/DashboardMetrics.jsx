@@ -21,66 +21,110 @@ function DashboardMetrics({ stats = {} }) {
   const focusStability = Math.floor(Math.random() * 20) + 70; // Fake stability for MVP
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      <div className="metrics">
-      <Card className="metric">
-        <div className="metric-label">Cette semaine</div>
-
-        <div className="metric-value">{values.semaine} h</div>
-
-        <div className="metric-sub">Sessions de focus</div>
-      </Card>
-
-      <Card className="metric">
-        <div className="metric-label">Ce mois</div>
-
-        <div className="metric-value">{values.mois} h</div>
-
-        <div className="metric-sub">Objectif: 160h</div>
-      </Card>
-
-      <Card className="metric">
-        <div className="metric-label">Temps Client</div>
-
-        <div className="metric-value">{values.facturable}%</div>
-
-        <div className="metric-sub">Focus sur mandats externes</div>
-      </Card>
-
-      <Card className="metric">
-        <div className="metric-label">Valeur Créée</div>
-
-        <div className="metric-value">
-          {values.montant}
-        </div>
-
-        <div className="metric-sub">Prêt à facturer</div>
-      </Card>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)' }}>
+      {/* Intention principale : Informer sans sur-stimuler */}
+      
+      {/* Status Banner */}
+      <div style={{ 
+        padding: 'var(--spacing-md)', 
+        background: 'var(--color-surface)', 
+        borderRadius: 'var(--radius-md)',
+        border: '1px solid var(--color-border)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 'var(--spacing-xs)'
+      }}>
+        <h2 style={{ 
+          fontSize: '16px', 
+          color: 'var(--color-success)', 
+          margin: 0,
+          fontWeight: 600
+        }}>
+          Today: Stable Cognitive Flow
+        </h2>
+        <p style={{ 
+          margin: 0, 
+          color: 'var(--color-text-secondary)', 
+          fontSize: '14px',
+          lineHeight: 1.5
+        }}>
+          Quelques shifts d'attention détectés, mais une excellente capacité de recovery.
+        </p>
       </div>
 
-      <div style={{ marginTop: '10px', marginBottom: '10px' }}>
-        <h3 style={{ fontSize: '1rem', color: 'var(--color-text-muted)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '1px' }}>
-          🧠 Santé Cognitive
+      {/* Metrics Grid */}
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+        gap: 'var(--spacing-md)' 
+      }}>
+        <Card style={{ 
+          background: 'var(--color-surface)',
+          borderColor: 'var(--color-border)',
+          padding: 'var(--spacing-md)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'var(--spacing-xs)'
+        }}>
+          <div style={{ color: 'var(--color-text-secondary)', fontSize: '13px', fontWeight: 500 }}>Focus Blocks</div>
+          <div style={{ color: 'var(--color-primary)', fontSize: '28px', fontWeight: 700, lineHeight: 1 }}>4</div>
+          <div style={{ color: 'var(--color-text-muted)', fontSize: '13px' }}>Cycles profonds complétés</div>
+        </Card>
+
+        <Card style={{ 
+          background: 'var(--color-surface)',
+          borderColor: 'var(--color-border)',
+          padding: 'var(--spacing-md)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'var(--spacing-xs)'
+        }}>
+          <div style={{ color: 'var(--color-text-secondary)', fontSize: '13px', fontWeight: 500 }}>Fragmentation</div>
+          <div style={{ color: 'var(--color-warning)', fontSize: '28px', fontWeight: 700, lineHeight: 1 }}>Faible</div>
+          <div style={{ color: 'var(--color-text-muted)', fontSize: '13px' }}>Interruptions cognitives</div>
+        </Card>
+
+        <Card style={{ 
+          background: 'var(--color-surface)',
+          borderColor: 'var(--color-border)',
+          padding: 'var(--spacing-md)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'var(--spacing-xs)'
+        }}>
+          <div style={{ color: 'var(--color-text-secondary)', fontSize: '13px', fontWeight: 500 }}>Recovery Speed</div>
+          <div style={{ color: 'var(--color-success)', fontSize: '28px', fontWeight: 700, lineHeight: 1 }}>Rapide</div>
+          <div style={{ color: 'var(--color-text-muted)', fontSize: '13px' }}>~3 min pour se recentrer</div>
+        </Card>
+      </div>
+
+      {/* Tomorrow Suggestion - Elevated for slight focus without distraction */}
+      <div style={{ marginTop: 'var(--spacing-sm)' }}>
+        <h3 style={{ 
+          fontSize: '14px', 
+          color: 'var(--color-text-secondary)', 
+          marginBottom: 'var(--spacing-sm)', 
+          textTransform: 'uppercase', 
+          letterSpacing: '1px',
+          fontWeight: 600,
+          margin: '0 0 var(--spacing-sm) 0'
+        }}>
+          Suggestion
         </h3>
-        <div className="metrics" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
-          <Card className="metric" style={{ borderTop: '3px solid var(--color-success)' }}>
-            <div className="metric-label">Stabilité du Focus</div>
-            <div className="metric-value" style={{ color: 'var(--color-success)' }}>{focusStability}%</div>
-            <div className="metric-sub">Moyenne de la session</div>
-          </Card>
-          
-          <Card className="metric" style={{ borderTop: '3px solid var(--color-primary)' }}>
-            <div className="metric-label">Résilience</div>
-            <div className="metric-value" style={{ color: 'var(--color-primary)' }}>{resilienceCount}x</div>
-            <div className="metric-sub">Distractions évitées</div>
-          </Card>
-          
-          <Card className="metric" style={{ borderTop: '3px solid var(--color-warning)' }}>
-            <div className="metric-label">Hyperfocus</div>
-            <div className="metric-value" style={{ color: 'var(--color-warning)' }}>{hyperfocusCount}x</div>
-            <div className="metric-sub">Sessions &gt; 45min</div>
-          </Card>
-        </div>
+        <Card style={{ 
+          padding: 'var(--spacing-md)', 
+          background: 'var(--color-elevated)',
+          border: '1px solid var(--color-border)'
+        }}>
+          <p style={{ 
+            margin: 0, 
+            fontSize: '14px', 
+            color: 'var(--color-text-primary)',
+            lineHeight: 1.5 
+          }}>
+            Tes sessions matinales montrent une stabilité 2x supérieure. Tu sembles mieux te concentrer en blocs de 45 minutes.
+          </p>
+        </Card>
       </div>
     </div>
   );

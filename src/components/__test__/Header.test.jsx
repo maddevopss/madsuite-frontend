@@ -7,6 +7,10 @@ jest.mock("../../TimerContext", () => ({
   useTimer: jest.fn(),
 }));
 
+jest.mock("../../ThemeContext", () => ({
+  useTheme: () => ({ theme: "light", toggleTheme: jest.fn() }),
+}));
+
 jest.mock("../../api/api", () => ({
   get: jest.fn(),
 }));
@@ -16,6 +20,8 @@ jest.mock("../../assets/logo.png", () => "logo.png");
 jest.mock("../../assets/Icon/idx_icon", () => ({
   PlayIcon: () => <span data-testid="play-icon">Play</span>,
   PauseIcon: () => <span data-testid="pause-icon">Pause</span>,
+  BsSun: () => <span data-testid="bs-sun">Sun</span>,
+  BsMoon: () => <span data-testid="bs-moon">Moon</span>,
 }));
 
 jest.mock("../activity-intelligence/ActivitySuggestionBadge", () => {

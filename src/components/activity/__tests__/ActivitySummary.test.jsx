@@ -15,6 +15,7 @@ jest.mock("recharts", () => ({
   Tooltip: () => <div data-testid="tooltip" />,
   XAxis: () => <div data-testid="x-axis" />,
   YAxis: () => <div data-testid="y-axis" />,
+  ResponsiveContainer: ({ children }) => <div data-testid="responsive-container">{children}</div>,
 }));
 
 const emptySummaryResponse = { data: [] };

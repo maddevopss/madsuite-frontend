@@ -16,6 +16,10 @@ jest.mock("../TimerContext", () => ({
   useTimer: () => ({ formatTime: mockFormatTime }),
 }));
 
+jest.mock("../ToastContext", () => ({
+  useToast: () => ({ showToast: jest.fn() }),
+}));
+
 describe("timesheet, reports and settings missing coverage", () => {
   beforeEach(() => {
     jest.clearAllMocks();

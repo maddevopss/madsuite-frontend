@@ -10,6 +10,7 @@ import AnalyticsView from "./AnalyticsView";
 import { useReports } from "../../hooks/useReports";
 import { exportReportsCSV, exportReportsPDF } from "../../utils/reportsExcel.utils";
 import { Button } from "../../components/ui";
+import { useAuth } from "../../api/authContext";
 
 export default function Reports() {
   const {
@@ -37,8 +38,10 @@ export default function Reports() {
     setter((prev) => !prev);
   };
 
+  const { user } = useAuth();
+
   const handleExportPDF = async () => {
-    await exportReportsPDF(rows, total, period, groupBy);
+    await exportReportsPDF(rows, total, period, groupBy, user?.nom);
   };
 
   return (
@@ -50,7 +53,7 @@ export default function Reports() {
         setGroupBy={setGroupBy}
         isBilled={isBilled}
         setIsBilled={setIsBilled}
-        onExportCSV={() => exportReportsCSV(rows, period, groupBy)}
+        onExportCSV={() => exportReportsCSV(rows, period, groupBy, user?.nom)}
         onExportPDF={handleExportPDF}
         onToggleTimeEntries={() => togglePreview(setShowTimeEntriesPreview)}
         onToggleActivityLogs={() => togglePreview(setShowActivityLogsPreview)}

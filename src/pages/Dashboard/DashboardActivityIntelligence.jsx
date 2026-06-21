@@ -1,14 +1,17 @@
-import { memo, useCallback, useMemo } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { Badge, Button, Card, EmptyState } from "../../components/ui";
 
 import { classifyActivity, detectProjectFromTitle } from "../../utils/activityClassifier";
 
 import { useReports } from "../../hooks/useReports";
 import { useTimer } from "../../TimerContext";
+import AutoTimesheetModal from "../Timesheet/AutoTimesheetModal";
 
 function DashboardActivityIntelligence() {
   const { activityLogs = [] } = useReports();
   const { projets = [], restartProject } = useTimer();
+
+  const [showAutoFill, setShowAutoFill] = useState(false);
 
   const recent = useMemo(() => activityLogs.slice(0, 6), [activityLogs]);
 
@@ -38,7 +41,17 @@ function DashboardActivityIntelligence() {
 
   return (
     <Card className="dashboard-activity-intelligence">
-      <div className="card-title">Activité intelligente</div>
+      <div className="card-title" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          🧠 Assistant Mémoire (IA)
+        </div>
+        <Button size="sm" variant="primary" onClick={() => setShowAutoFill(true)}>
+          ✨ Créer ma feuille de temps
+        </Button>
+      </div>
+      <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '16px' }}>
+        Oublié de démarrer le chronomètre ? Voici ce que l'IA a détecté pendant votre session.
+      </p>
 
       <div className="activity-ai-list">
         {recent.length === 0 ? (
@@ -77,6 +90,17 @@ function DashboardActivityIntelligence() {
           })
         )}
       </div>
+
+      <AutoTimesheetModal 
+        show={showAutoFill} 
+        onClose={() => setShowAutoFill(false)} 
+        targetDate={new Date().toISOString().split('T')[0]}
+        onSaveSuccess={() => {
+          setShowAutoFill(false);
+          // Optionnel : un petit toast ou reload pour rafraichir
+          window.location.reload();
+        }} 
+      />
     </Card>
   );
 }

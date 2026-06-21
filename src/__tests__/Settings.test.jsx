@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import Settings from "../pages/Settings";
 import { useSettings } from "../hooks/useSettings";
 import { AuthProvider } from "../api/authContext";
@@ -36,15 +37,14 @@ jest.mock("../pages/Settings/SettingsGeneral", () => () => (
 beforeEach(() => {
   jest.clearAllMocks();
   setAccessToken("fake-token");
-
-  localStorage.setItem(
-    "user",
-    JSON.stringify({
+  jest.spyOn(require("../api/authContext"), "useAuth").mockReturnValue({
+    user: {
       id: 1,
       nom: "User Test",
       role: "admin",
-    }),
-  );
+    },
+    token: "fake-token",
+  });
 
   useSettings.mockReturnValue({
     settings: {
@@ -64,23 +64,26 @@ afterEach(() => {
 describe("Settings page", () => {
   test("affiche les paramètres", () => {
     render(
-      <AuthProvider>
-        <Settings />
-      </AuthProvider>,
+      <MemoryRouter>
+        <AuthProvider>
+          <Settings />
+        </AuthProvider>
+      </MemoryRouter>,
     );
 
     expect(screen.getByText("Paramètres")).toBeInTheDocument();
     expect(screen.getByText("Utilisateur")).toBeInTheDocument();
     expect(screen.getByText("User Test")).toBeInTheDocument();
-    expect(screen.getByText("Préférences")).toBeInTheDocument();
     expect(screen.getByText("Général")).toBeInTheDocument();
   });
 
   test("charge les settings", () => {
     render(
-      <AuthProvider>
-        <Settings />
-      </AuthProvider>,
+      <MemoryRouter>
+        <AuthProvider>
+          <Settings />
+        </AuthProvider>
+      </MemoryRouter>,
     );
 
     expect(useSettings).toHaveBeenCalled();

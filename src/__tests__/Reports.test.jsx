@@ -10,6 +10,10 @@ jest.mock("../utils/reportsExcel.utils", () => ({
   exportReportsPDF: jest.fn(),
 }));
 
+jest.mock("../api/authContext", () => ({
+  useAuth: () => ({ user: { prenom: "Test", nom: "User" } }),
+}));
+
 jest.mock("../pages/Reports/ReportsHeader", () => (props) => (
   <div>
     <h1>Rapports</h1>

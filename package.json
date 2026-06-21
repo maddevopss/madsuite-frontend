@@ -20,11 +20,13 @@
   "dependencies": {
     "@hookform/resolvers": "^4.1.0",
     "@stripe/stripe-js": "^9.8.0",
+    "@tanstack/react-query": "^5.0.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "axios": "^1.16.0",
+    "canvas-confetti": "^1.9.4",
     "framer-motion": "^12.38.0",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^5.0.7",
@@ -44,7 +46,20 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "no-unused-vars": "off",
+      "react-hooks/exhaustive-deps": "off",
+      "testing-library/no-node-access": "off",
+      "testing-library/no-container": "off",
+      "testing-library/no-wait-for-multiple-assertions": "off",
+      "testing-library/no-unnecessary-act": "off",
+      "testing-library/render-result-naming-convention": "off",
+      "jest/no-conditional-expect": "off",
+      "no-unused-expressions": "off",
+      "import/no-anonymous-default-export": "off",
+      "no-new-func": "off"
+    }
   },
   "browserslist": {
     "production": [

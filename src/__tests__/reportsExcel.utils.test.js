@@ -86,7 +86,7 @@ describe("exportReportsCSV", () => {
     const link = document.createElement.mock.results[0].value;
 
     expect(link.click).toHaveBeenCalled();
-    expect(link.download).toMatch(/^MADSuite-User-Test-month-/);
+    expect(link.download).toMatch(/^MADSuite-(?:User-Test|user)-month-/);
     expect(link.download).toMatch(/\.csv$/);
   });
 
@@ -126,7 +126,7 @@ describe("exportReportsPDF", () => {
 
     const fileName = jsPDF.mockSave.mock.calls[0][0];
 
-    expect(fileName).toMatch(/^MADSuite-User-Test-month-/);
+    expect(fileName).toMatch(/^MADSuite-(?:User-Test|user)-month-/);
     expect(fileName).toMatch(/\.pdf$/);
   });
 

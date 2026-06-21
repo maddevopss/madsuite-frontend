@@ -21,6 +21,10 @@ jest.mock("../hooks/useModal", () => ({
   useModal: (...args) => mockUseModal(...args),
 }));
 
+jest.mock("../ToastContext", () => ({
+  useToast: () => ({ showToast: jest.fn() }),
+}));
+
 jest.mock("../components/ui", () => ({
   ConfirmModal: (props) => <div data-testid="confirm-modal" data-props={JSON.stringify(props)} />,
   Loader: ({ label }) => <div>{label}</div>,

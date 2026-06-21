@@ -41,3 +41,9 @@ if (typeof navigator !== "undefined" && !navigator.locks) {
 if (typeof globalThis.atob === "undefined") {
   globalThis.atob = (str) => Buffer.from(str, "base64").toString("binary");
 }
+
+if (typeof globalThis.TextEncoder === "undefined") {
+  const { TextEncoder, TextDecoder } = require("util");
+  globalThis.TextEncoder = TextEncoder;
+  globalThis.TextDecoder = TextDecoder;
+}

@@ -96,6 +96,24 @@
   padding: 10px 14px;
   background: var(--color-surface-strong);
   box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.timer-visual-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background: var(--color-danger); /* Rouge style Time Timer */
+  transition: width 1s linear;
+  z-index: 0;
+}
+
+/* Ensure contents stay above progress bar */
+.timer-bar > *:not(.timer-visual-progress) {
+  position: relative;
+  z-index: 1;
 }
 
 .timer-status {

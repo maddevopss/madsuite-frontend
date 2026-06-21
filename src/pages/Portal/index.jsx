@@ -1,9 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import SignaturePad from "./SignaturePad";
+import { usePortal } from "../../hooks/usePortal";
 import "./portal.css";
-
-const API_BASE = import.meta.env.VITE_API_URL || "";
 
 function formatMoney(value) {
   return new Intl.NumberFormat("fr-CA", { style: "currency", currency: "CAD" }).format(Number(value || 0));
@@ -19,7 +17,7 @@ function isOverdue(dueDate) {
   return new Date(dueDate) < new Date();
 }
 
-function StatusBadge({ status, type }) {
+function StatusBadge({ status }) {
   const labels = {
     draft: "Brouillon", sent: "Envoyée", paid: "Payée ✓", void: "Annulée",
     accepted: "Acceptée ✓", rejected: "Refusée",
@@ -37,96 +35,22 @@ function StatusBadge({ status, type }) {
 
 export default function Portal() {
   const { token } = useParams();
-  const [searchParams] = useSearchParams();
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [actionLoading, setActionLoading] = useState(false);
-  const [paymentLoading, setPaymentLoading] = useState(false);
-  const [showSignature, setShowSignature] = useState(false);
-  const [signatureData, setSignatureData] = useState(null);
-  const [localStatus, setLocalStatus] = useState(null);
-
-  const paymentResult = searchParams.get("payment"); // "success" | "cancelled"
-
-  const fetchData = useCallback(async () => {
-    try {
-      const response = await fetch(`${API_BASE}/api/portal/${token}`);
-      if (!response.ok) throw new Error("Lien expiré ou invalide.");
-      const result = await response.json();
-      setData(result);
-      setLocalStatus(result.document?.status);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, [token]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  // Re-fetch if payment=success to get updated status
-  useEffect(() => {
-    if (paymentResult === "success" && data) {
-      // Optimistic update
-      setLocalStatus("paid");
-      // Also re-fetch after short delay to confirm from server
-      setTimeout(fetchData, 2000);
-    }
-  }, [paymentResult]); // eslint-disable-line
-
-  const handleAction = async (action) => {
-    setActionLoading(true);
-    try {
-      const body = { action };
-      if (action === "accepted" && signatureData) {
-        body.signature_data = signatureData;
-      }
-
-      const response = await fetch(`${API_BASE}/api/portal/${token}/action`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.message || "Action impossible");
-      }
-
-      setLocalStatus(action);
-      setShowSignature(false);
-    } catch (err) {
-      alert(err.message);
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  const handlePay = async () => {
-    setPaymentLoading(true);
-    try {
-      const response = await fetch(`${API_BASE}/api/portal/${token}/checkout`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({}),
-      });
-      const result = await response.json();
-      if (!result.success) throw new Error(result.message);
-      window.location.href = result.url;
-    } catch (err) {
-      alert(err.message || "Impossible d'initier le paiement.");
-      setPaymentLoading(false);
-    }
-  };
-
-  const handleSignatureConfirm = (dataUrl) => {
-    setSignatureData(dataUrl);
-    // Auto-submit after signature confirmed
-    handleAction("accepted");
-  };
+  const {
+    data,
+    loading,
+    error,
+    actionLoading,
+    paymentLoading,
+    showSignature,
+    setShowSignature,
+    setSignatureData,
+    localStatus,
+    paymentResult,
+    handleAction,
+    handlePay,
+    handleSignatureConfirm,
+    pdfUrl
+  } = usePortal(token);
 
   // ── Loading ──────────────────────────────────────────────────────────────
   if (loading) {
@@ -326,7 +250,7 @@ export default function Portal() {
           {/* PDF download */}
           {isInvoice && (
             <a
-              href={`${API_BASE}/api/portal/${token}/pdf`}
+              href={pdfUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="portal-btn portal-btn-pdf"

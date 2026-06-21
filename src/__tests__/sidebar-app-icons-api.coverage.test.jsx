@@ -28,6 +28,7 @@ jest.mock(
     ),
     Outlet: () => <div data-testid="outlet">Outlet</div>,
     useNavigate: () => jest.fn(),
+    useParams: () => ({ kioskToken: "fake-token" }),
   }),
   { virtual: true },
 );
@@ -57,6 +58,9 @@ jest.mock("../TimerContext", () => ({
 jest.mock("../components/Layout", () => () => <div>Layout mock</div>);
 jest.mock("../routes/ProtectedRoute", () => () => <div>ProtectedRoute mock</div>);
 jest.mock("../pages/Login", () => () => <div>Login mock</div>);
+jest.mock("../pages/Signup", () => () => <div>Signup mock</div>);
+jest.mock("../pages/Landing", () => () => <div>Landing mock</div>);
+jest.mock("../pages/Portal", () => () => <div>Portal mock</div>);
 jest.mock("../pages/Dashboard", () => () => <div>Dashboard mock</div>);
 jest.mock("../pages/Users", () => () => <div>Users mock</div>);
 jest.mock("../pages/Reports", () => () => <div>Reports mock</div>);
@@ -86,10 +90,9 @@ describe("sidebar, app and icons coverage", () => {
     expect(screen.getByText("admin")).toBeInTheDocument();
     expect(screen.getByText("Tableau de bord")).toBeInTheDocument();
     expect(screen.getByText("Facturation")).toBeInTheDocument();
-    expect(screen.queryByText("Assistant Facture")).not.toBeInTheDocument();
-    expect(screen.queryByText("Innovation IA")).not.toBeInTheDocument();
-    expect(screen.queryByText("MobilePunch")).not.toBeInTheDocument();
-    expect(screen.queryByText("Calcul du km")).not.toBeInTheDocument();
+    expect(screen.getByText("Innovation IA")).toBeInTheDocument();
+    expect(screen.getByText("Mobile Punch")).toBeInTheDocument();
+    expect(screen.getByText("Calcul Km")).toBeInTheDocument();
 
     fireEvent.click(screen.getByText("Déconnexion"));
     expect(mockOnLogout).toHaveBeenCalled();

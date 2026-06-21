@@ -1,7 +1,6 @@
 import api from "../api";
 import authService from "../authService";
-import { getAccessToken, setAccessToken } from "../tokenStore";
-import { getStoredUser, setStoredUser } from "../userStore";
+import { getAccessToken, setAccessToken, clearAccessToken } from "../tokenStore";
 
 jest.mock("../api");
 
@@ -30,13 +29,11 @@ describe("authService", () => {
   test("logout appelle le backend même sans access token et nettoie l'état local", async () => {
     api.post.mockResolvedValue({ data: { success: true } });
     setAccessToken(null);
-    setStoredUser({ id: 1, email: "test@test.com" });
 
     await authService.logout();
 
     expect(api.post).toHaveBeenCalledWith("/logout");
     expect(getAccessToken()).toBeNull();
-    expect(getStoredUser()).toBeNull();
   });
 
   test("login fails with invalid credentials", async () => {

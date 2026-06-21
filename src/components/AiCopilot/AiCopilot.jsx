@@ -53,6 +53,7 @@ export default function AiCopilot() {
     }
   };
 
+
   return (
     <div className={`ai-copilot-container ${isOpen ? "open" : ""}`}>
       {isOpen && (

@@ -1,6 +1,6 @@
 import api from "./api";
 import { clearAccessToken, getAccessToken, setAccessToken } from "./tokenStore";
-import { clearStoredUser, getStoredUser, setStoredUser } from "./userStore";
+
 
 const authService = {
   // Connecte l'utilisateur et sauvegarde le token.
@@ -25,7 +25,6 @@ const authService = {
     if (!isElectron) {
       setAccessToken(token); // Uniquement en mémoire (tokenStore.js)
     }
-    setStoredUser(user);
     return { token, user };
   },
 
@@ -41,7 +40,6 @@ const authService = {
     if (!window.agentAPI?.login) {
       setAccessToken(token); 
     }
-    setStoredUser(user);
     return { token, user };
   },
 
@@ -60,7 +58,6 @@ const authService = {
     } finally {
       // 3. Nettoyage systématique des stores locaux (Mémoire + Cache UI)
       clearAccessToken();
-      clearStoredUser();
     }
   },
 
@@ -72,10 +69,6 @@ const authService = {
     if (!token) throw new Error("Token manquant du serveur");
 
     setAccessToken(token);
-    if (user) {
-      setStoredUser(user);
-    }
-
     return { token, user };
   },
 
@@ -89,11 +82,9 @@ const authService = {
   },
 
   // Retourne les informations de l'utilisateur connecté
-  // IMPORTANT: le contenu de localStorage.user doit rester un cache UI.
-  // On ne doit jamais s'en servir côté backend pour l'autorisation.
   // Côté frontend, on le considère uniquement comme cache et on vérifie le token d'abord.
   getUser: () => {
-    return getAccessToken() ? getStoredUser() : null;
+    return null;
   },
 
   // Vérifie si l'utilisateur est connecté

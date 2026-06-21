@@ -1,22 +1,15 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { formatDate, formatHours, formatMoney } from "./formatters";
-import { getStoredUser } from "../api/userStore";
-import { captureElement } from "./lazyHtml2canvas"; // ← Ajoute cet import
-
-function getCurrentUserName() {
-  return getStoredUser()?.nom || "user";
-}
-
-function buildExportName(period, extension) {
+function buildExportName(userName, period, extension) {
   const date = new Date().toISOString().slice(0, 10);
-  const userName = getCurrentUserName()
+  const cleanUserName = (userName || "user")
     .replaceAll(" ", "-")
     .replace(/[^a-zA-Z0-9-_]/g, "");
-  return `MADSuite-${userName}-${period}-${date}.${extension}`;
+  return `MADSuite-${cleanUserName}-${period}-${date}.${extension}`;
 }
 
-export function exportReportsCSV(rows, period, groupBy) {
+export function exportReportsCSV(rows, period, groupBy, userName) {
   // ✅ Aucun changement — reste synchrone, pas de lazy-load
   if (!rows || rows.length === 0) return;
 
@@ -121,13 +114,13 @@ export function exportReportsCSV(rows, period, groupBy) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = buildExportName(period, "csv");
+  link.download = buildExportName(userName, period, "csv");
   link.click();
   URL.revokeObjectURL(url);
 }
 
 // ✅ CORRIGÉ : async pour lazy-load html2canvas
-export async function exportReportsPDF(rows, total, period, groupBy) {
+export async function exportReportsPDF(rows, total, period, groupBy, userName) {
   if (!rows || rows.length === 0) return;
 
   try {
@@ -245,7 +238,7 @@ export async function exportReportsPDF(rows, total, period, groupBy) {
       headStyles: { fontSize: 8 },
     });
 
-    doc.save(buildExportName(period, "pdf"));
+    doc.save(buildExportName(userName, period, "pdf"));
   } catch (err) {
     console.error("PDF export error:", err);
     alert("Erreur lors de l'export PDF: " + err.message);

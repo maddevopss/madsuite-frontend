@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useState } from "react";
-import { Bar, BarChart, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, Tooltip, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import api from "../../api/api";
 import { categorizeUnclassifiedAi } from "../../api/activity.api";
 import { toast } from "react-toastify";
@@ -69,6 +69,16 @@ function ActivitySummary() {
         heures: Number(item.total_seconds || 0) / 3600,
       }));
 
+      const sortedFormatted = [...formatted].sort((a, b) => b.heures - a.heures);
+      let displayRows = sortedFormatted;
+      
+      if (sortedFormatted.length > 15) {
+        const top15 = sortedFormatted.slice(0, 15);
+        const others = sortedFormatted.slice(15);
+        const othersHeures = others.reduce((acc, curr) => acc + curr.heures, 0);
+        displayRows = [...top15, { name: "Autres", category: "neutre", heures: othersHeures }];
+      }
+
       const totalsByCategory = formatted.reduce(
         (acc, item) => {
           acc[item.category] = (acc[item.category] || 0) + item.heures;
@@ -86,12 +96,12 @@ function ActivitySummary() {
       const score = totalHours > 0 ? (totalsByCategory.productif / totalHours) * 100 : 0;
 
       setProductivityScore(score);
-      setRows(formatted);
+      setRows(displayRows);
 
       setCategoryRows([
-        { name: "Productif", heures: totalsByCategory.productif },
+        { name: "Focus", heures: totalsByCategory.productif },
         { name: "Neutre", heures: totalsByCategory.neutre },
-        { name: "Distraction", heures: totalsByCategory.distraction },
+        { name: "Exploration", heures: totalsByCategory.distraction },
       ]);
 
       const distractions = formatted
@@ -152,7 +162,7 @@ function ActivitySummary() {
 
       {topProductive.length > 0 && (
         <div className="top-productive">
-          <h3>Top productif</h3>
+          <h3>Top Sessions de Focus</h3>
 
           {topProductive.map((item) => (
             <div className="top-productive-row" key={`productive-${item.name}`}>
@@ -165,7 +175,7 @@ function ActivitySummary() {
 
       {topDistractions.length > 0 && (
         <div className="top-distractions">
-          <h3>Top distractions</h3>
+          <h3>Exploration Libre</h3>
 
           {topDistractions.map((item) => (
             <div className="top-distraction-row" key={`distraction-${item.name}`}>
@@ -178,7 +188,7 @@ function ActivitySummary() {
 
       {rows.length > 0 && (
         <div className="productivity-score">
-          <span>Score de productivité</span>
+          <span>Score de Focus</span>
           <strong>{productivityScore.toFixed(0)}%</strong>
         </div>
       )}
@@ -198,13 +208,15 @@ function ActivitySummary() {
         <>
           <h3>Temps par catégorie</h3>
 
-          <div className="activity-chart-wrapper activity-chart-wrapper-small">
-            <BarChart width={700} height={260} data={categoryRows}>
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip formatter={(value) => `${Number(value).toFixed(2)} h`} />
-              <Bar dataKey="heures" />
-            </BarChart>
+          <div className="activity-chart-wrapper activity-chart-wrapper-small" style={{ width: '100%', height: '260px' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={categoryRows}>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip formatter={(value) => `${Number(value).toFixed(2)} h`} />
+                <Bar dataKey="heures" />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </>
       )}
@@ -213,13 +225,15 @@ function ActivitySummary() {
         <>
           <h3>Temps par application</h3>
 
-          <div className="activity-chart-wrapper activity-chart-wrapper-large">
-            <BarChart width={700} height={320} data={rows}>
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip formatter={(value) => `${Number(value).toFixed(2)} h`} />
-              <Bar dataKey="heures" />
-            </BarChart>
+          <div className="activity-chart-wrapper activity-chart-wrapper-large" style={{ width: '100%', height: '320px' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={rows}>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip formatter={(value) => `${Number(value).toFixed(2)} h`} />
+                <Bar dataKey="heures" />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </>
       )}

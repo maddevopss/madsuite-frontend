@@ -12,6 +12,10 @@ jest.mock("../../hooks/useDashboard", () => ({
   }),
 }));
 
+jest.mock("../../hooks/useReportData", () => ({
+  useMonthlyData: jest.fn().mockReturnValue({ data: null, isLoading: false, error: null }),
+}));
+
 jest.mock("../../RefreshContext", () => ({
   useRefresh: () => ({
     refreshKey: 0,

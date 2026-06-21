@@ -31,7 +31,6 @@ const processQueue = (error, token = null) => {
 
 const redirectToLogin = () => {
   clearAccessToken();
-  localStorage.removeItem("user");
 
   if (typeof window !== "undefined" && window.location) {
     const isAlreadyOnLogin = window.location.pathname === "/login";

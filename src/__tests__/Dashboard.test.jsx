@@ -4,6 +4,10 @@ import { useDashboard } from "../hooks/useDashboard";
 
 jest.mock("../hooks/useDashboard");
 
+jest.mock("../hooks/useReportData", () => ({
+  useMonthlyData: jest.fn().mockReturnValue({ data: null, isLoading: false, error: null }),
+}));
+
 jest.mock("../pages/Dashboard/DashboardMetrics", () => (props) => (
   <div>
     <h2>Metrics</h2>

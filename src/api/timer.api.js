@@ -22,6 +22,11 @@ export const startTimer = async (data) => {
   return unwrapApiResponse(res);
 };
 
+export const startUnsortedTimer = async (description) => {
+  const res = await api.post("/timer/start-unsorted", { description });
+  return unwrapApiResponse(res);
+};
+
 export const stopTimer = async () => {
   const res = await api.patch("/timer/stop");
   return unwrapApiResponse(res);

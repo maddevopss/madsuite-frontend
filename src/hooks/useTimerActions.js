@@ -1,6 +1,7 @@
 import { useCallback } from "react";
+import confetti from "canvas-confetti";
 
-import { startTimer, stopTimer, updateActiveNote } from "../api/timer.api";
+import { startTimer, startUnsortedTimer, stopTimer, updateActiveNote } from "../api/timer.api";
 import { buildActiveEntry } from "../timerContext.helpers";
 
 export function useTimerActions({
@@ -26,18 +27,23 @@ export function useTimerActions({
 }) {
   const toggleTimer = useCallback(async () => {
     if (!isRunning) {
-      if (!selectedProjet) {
-        showToast("Selectionne un projet avant de demarrer le timer.", "error");
-        return;
-      }
-
       try {
-        const timerData = await startTimer({
-          projet_id: Number(selectedProjet),
-          description: description || null,
-        });
-        const project = projets.find((p) => String(p.id) === String(selectedProjet));
-        const client = clients.find((c) => String(c.id) === String(selectedClient));
+        let timerData;
+        let project = null;
+        let client = null;
+
+        if (!selectedProjet) {
+          timerData = await startUnsortedTimer(description || null);
+          // the timerData might return project_id and client_id, we can load them or let bootstrap do it
+          // for MVP, let's just trigger a full reload since the "À classer" project was just created
+        } else {
+          timerData = await startTimer({
+            projet_id: Number(selectedProjet),
+            description: description || null,
+          });
+          project = projets.find((p) => String(p.id) === String(selectedProjet));
+          client = clients.find((c) => String(c.id) === String(selectedClient));
+        }
 
         setActiveEntry(buildActiveEntry(timerData, { project, client, clientId: selectedClient }));
         showToast("Timer demarre", "success");
@@ -56,6 +62,16 @@ export function useTimerActions({
 
     try {
       await stopTimer();
+      
+      // Dopamine Hit / Gamification (TDAH)
+      // On déclenche les confettis si le timer a roulé plus de 1 minute (60s) pour éviter le spam, 
+      // ou on peut le déclencher à chaque fois pour l'instant (MVP).
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+
       showToast("Timer arrete", "info");
       setIsRunning(false);
       setActiveEntry(null);

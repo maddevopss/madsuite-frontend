@@ -1,6 +1,5 @@
 import { useState, createContext, useContext, useEffect } from "react";
 import authService from "./authService";
-import { getStoredUser } from "./userStore";
 
 export const AuthContext = createContext();
 
@@ -8,9 +7,7 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(authService.getToken());
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
-  // user dans localStorage est seulement un cache UI.
-  // On ne le charge que si on a déjà un token en mémoire.
-  const [user, setUser] = useState(() => (authService.getToken() ? getStoredUser() : null));
+  const [user, setUser] = useState(null);
 
   // Restaure le token depuis electron-store au premier montage et relance le tracking
   // (l'ancien flujo injectait via executeJavaScript — maintenant React lit via IPC)
@@ -29,7 +26,7 @@ export function AuthProvider({ children }) {
             authService.setToken(storedToken);
             if (!cancelled) {
               setToken(storedToken);
-              setUser(typeof restoredSession === "string" ? authService.getUser() : restoredSession?.user || authService.getUser());
+              setUser(typeof restoredSession === "string" ? null : restoredSession?.user || null);
             }
             return;
           }
@@ -49,7 +46,7 @@ export function AuthProvider({ children }) {
 
           if (!cancelled) {
             setToken(refreshed.token);
-            setUser(refreshed.user || authService.getUser());
+            setUser(refreshed.user || null);
           }
         }
       } catch {
@@ -85,11 +82,8 @@ export function AuthProvider({ children }) {
         authService.setToken(newToken);
         setToken(newToken);
       }
-
       if (payload?.user) {
         setUser(payload.user);
-      } else {
-        setUser(authService.getUser());
       }
     });
 
@@ -160,7 +154,7 @@ export function AuthProvider({ children }) {
   // LOGIN
   const handleLogin = (session) => {
     const newToken = typeof session === "string" ? session : session?.token;
-    const newUser = typeof session === "string" ? authService.getUser() : session?.user;
+    const newUser = typeof session === "string" ? null : session?.user;
 
     setToken(newToken);
     authService.setToken(newToken);

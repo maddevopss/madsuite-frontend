@@ -5,7 +5,11 @@ import { useTimer } from "../TimerContext";
 import { useTheme } from "../ThemeContext";
 import api from "../api/api";
 import ActivitySuggestionBadge from "./activity-intelligence/ActivitySuggestionBadge";
+import FocusTunnel from "../pages/Dashboard/FocusTunnel";
+import AnchorRitualModal from "./AnchorRitualModal";
+import CognitiveMirrorModal from "./CognitiveMirrorModal";
 import "./layout/header.css";
+import { useState } from "react";
 
 const ResumeProjectButton = memo(function ResumeProjectButton({ project, onResume }) {
   return (
@@ -49,6 +53,61 @@ export default function Header() {
     activeTimerWarning,
     stopActiveTimer,
   } = useTimer();
+
+  const elapsedSeconds = useTimer().elapsed || 0;
+  const progressPercent = useMemo(() => {
+    if (!isRunning) return 0;
+    return Math.min(100, (elapsedSeconds % 3600) / 3600 * 100);
+  }, [isRunning, elapsedSeconds]);
+
+  const [showFocusTunnel, setShowFocusTunnel] = useState(false);
+  const [showAnchorRitual, setShowAnchorRitual] = useState(false);
+  const [showCognitiveMirror, setShowCognitiveMirror] = useState(false);
+  const [mirrorData, setMirrorData] = useState({ intent: "", startTime: null, endTime: null });
+  const [isPulsing, setIsPulsing] = useState(false);
+
+  // Momentum Engine : Pulse effect if inactive for > 2 mins
+  useEffect(() => {
+    let timer;
+    if (!isRunning) {
+      timer = setTimeout(() => {
+        setIsPulsing(true);
+      }, 120000); // 2 minutes
+    } else {
+      setIsPulsing(false);
+    }
+    return () => clearTimeout(timer);
+  }, [isRunning]);
+
+  const handlePlayClick = () => {
+    if (!isRunning) {
+      if (!description || description.trim() === "") {
+        setShowAnchorRitual(true);
+      } else {
+        toggleTimer();
+      }
+    } else {
+      // Stopping the timer -> Show Cognitive Mirror
+      if (activeEntry && activeEntry.start_time) {
+        setMirrorData({
+          intent: description,
+          startTime: activeEntry.start_time,
+          endTime: new Date().toISOString()
+        });
+        setShowCognitiveMirror(true);
+      }
+      toggleTimer();
+    }
+  };
+
+  const handleAnchorConfirm = (action, duration) => {
+    setDescription(action);
+    setShowAnchorRitual(false);
+    // On ajoute un timeout léger pour laisser le state description se propager (ou on lance direct)
+    setTimeout(() => {
+      if (!isRunning) toggleTimer();
+    }, 50);
+  };
 
   const loadProjets = useCallback(async () => {
     try {
@@ -109,6 +168,12 @@ export default function Header() {
       <img src={logo} className="App-logo" alt="logo" />
 
       <div className="timer-bar">
+        {isRunning && (
+          <div 
+            className="timer-visual-progress" 
+            style={{ width: `${progressPercent}%` }} 
+          />
+        )}
         <div className={`timer-status ${isRunning ? "running" : "idle"}`} />
 
         {!isRunning && visibleTodayProjects.length > 0 && (
@@ -121,7 +186,7 @@ export default function Header() {
 
         <input
           className="timer-input"
-          placeholder="Sur quoi travaillez-vous ?"
+          placeholder="Mon objectif (ex: 'Écrire 1 phrase', 'Ouvrir Figma') :"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           disabled={isRunning}
@@ -183,7 +248,11 @@ export default function Header() {
           </div>
         )}
 
-        <button className="timer-play" onClick={toggleTimer} disabled={!isRunning && !selectedProjet}>
+        <button 
+          className="timer-play" 
+          onClick={handlePlayClick}
+          style={isPulsing ? { animation: 'pulse-primary 2s infinite', boxShadow: '0 0 15px rgba(var(--color-primary-rgb), 0.5)' } : {}}
+        >
           {isRunning ? <PauseIcon /> : <PlayIcon />}
         </button>
 
@@ -207,7 +276,32 @@ export default function Header() {
         </button>
 
         <ActivitySuggestionBadge />
+        
+        {isRunning && (
+          <button 
+            className="theme-toggle" 
+            onClick={() => setShowFocusTunnel(true)} 
+            title="Entrer dans le tunnel"
+            style={{ background: "var(--color-danger)", color: "white", borderRadius: "16px", padding: "4px 12px", border: "none", cursor: "pointer", fontWeight: "bold", fontSize: "0.85rem", marginLeft: "8px" }}
+          >
+            🌑 Tunnel
+          </button>
+        )}
       </div>
+
+      <FocusTunnel show={showFocusTunnel} onClose={() => setShowFocusTunnel(false)} />
+      <AnchorRitualModal 
+        show={showAnchorRitual} 
+        onClose={() => setShowAnchorRitual(false)} 
+        onConfirm={handleAnchorConfirm} 
+      />
+      <CognitiveMirrorModal
+        show={showCognitiveMirror}
+        onClose={() => setShowCognitiveMirror(false)}
+        intent={mirrorData.intent}
+        startTime={mirrorData.startTime}
+        endTime={mirrorData.endTime}
+      />
     </header>
   );
 }

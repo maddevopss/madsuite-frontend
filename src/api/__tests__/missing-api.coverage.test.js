@@ -2,7 +2,7 @@ import api from "../api";
 import { getActivitySummary, getClientsSummary } from "../activity.api";
 import * as activityIntelligence from "../activityIntelligence.api";
 import * as projectDetection from "../projectDetection.api";
-import { clearStoredUser, getStoredUser, setStoredUser } from "../userStore";
+import { getAccessToken, setAccessToken, clearAccessToken } from "../tokenStore";
 
 jest.mock("../api");
 
@@ -94,23 +94,5 @@ describe("missing API wrappers coverage", () => {
     });
   });
 
-  test("userStore lit, écrit, supprime et ignore le JSON invalide", () => {
-    expect(getStoredUser()).toBeNull();
 
-    setStoredUser({ id: 1, nom: "Admin" });
-    expect(getStoredUser()).toEqual({ id: 1, nom: "Admin" });
-
-    setStoredUser(null);
-    expect(getStoredUser()).toBeNull();
-
-    localStorage.setItem("user", "undefined");
-    expect(getStoredUser()).toBeNull();
-
-    localStorage.setItem("user", "{bad json");
-    expect(getStoredUser()).toBeNull();
-
-    setStoredUser({ id: 2 });
-    clearStoredUser();
-    expect(localStorage.getItem("user")).toBeNull();
-  });
 });

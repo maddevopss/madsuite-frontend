@@ -49,7 +49,6 @@ export default function App() {
   }, []);
 
   return (
-    <BrowserRouter>
       <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={<Landing />} />
@@ -99,6 +98,5 @@ export default function App() {
           </Route>
         </Routes>
       </Suspense>
-    </BrowserRouter>
   );
 }

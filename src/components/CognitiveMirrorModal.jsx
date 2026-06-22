@@ -55,7 +55,7 @@ export default function CognitiveMirrorModal({ show, onClose, intent, startTime,
           <div style={{ textAlign: 'center' }}>
             <h2 style={{ fontSize: "1.3rem", marginBottom: "1rem" }}>Session terminée.</h2>
             <div style={{ marginBottom: "1.5rem" }}>
-              <div style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>Ton intention initiale :</div>
+              <div style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>Ton intention initiale :</div>
               <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--color-primary)' }}>
                 "{intent || "Aucun objectif précis"}"
               </div>
@@ -74,7 +74,7 @@ export default function CognitiveMirrorModal({ show, onClose, intent, startTime,
                 onChange={(e) => setPerceptionValue(e.target.value)}
                 style={{ width: '100%', cursor: 'pointer' }}
               />
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', color: 'var(--color-text-muted)', fontSize: '0.8rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', color: 'var(--color-text-secondary)', fontSize: '0.8rem' }}>
                 <span>Presque rien</span>
                 <span>Tout terminé</span>
               </div>
@@ -105,12 +105,12 @@ export default function CognitiveMirrorModal({ show, onClose, intent, startTime,
               border: '1px solid var(--color-border)'
             }}>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>Ta perception</div>
+                <div style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>Ta perception</div>
                 <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--color-primary)' }}>{perceptionValue}%</div>
               </div>
-              <div style={{ fontSize: '1.5rem', color: 'var(--color-text-muted)' }}>VS</div>
+              <div style={{ fontSize: '1.5rem', color: 'var(--color-text-secondary)' }}>VS</div>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>Stabilité réelle</div>
+                <div style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>Stabilité réelle</div>
                 <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--color-success)' }}>{truthPercentage}%</div>
               </div>
             </div>

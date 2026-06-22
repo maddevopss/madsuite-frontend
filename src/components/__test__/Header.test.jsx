@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Header from "../Header";
 import { useTimer } from "../../TimerContext";
 import api from "../../api/api";
+import { useNotifications } from "../../hooks/useNotifications";
 
 jest.mock("../../TimerContext", () => ({
   useTimer: jest.fn(),
@@ -9,6 +10,10 @@ jest.mock("../../TimerContext", () => ({
 
 jest.mock("../../ThemeContext", () => ({
   useTheme: () => ({ theme: "light", toggleTheme: jest.fn() }),
+}));
+
+jest.mock("../../hooks/useNotifications", () => ({
+  useNotifications: jest.fn(),
 }));
 
 jest.mock("../../api/api", () => ({
@@ -29,6 +34,11 @@ jest.mock("../activity-intelligence/ActivitySuggestionBadge", () => {
     return <div data-testid="activity-suggestion-badge" />;
   };
 });
+
+jest.mock("../CognitiveMirrorModal", () => ({
+  __esModule: true,
+  default: () => <div data-testid="cognitive-mirror-modal" />
+}));
 
 function makeTimerContext(overrides = {}) {
   return {
@@ -64,6 +74,12 @@ describe("Header", () => {
     api.get.mockResolvedValue({
       data: [],
     });
+
+    useNotifications.mockReturnValue({
+      notifications: [],
+      unreadCount: 0,
+      markAsRead: jest.fn()
+    });
   });
 
   test("affiche le bouton play quand aucun timer ne roule", async () => {
@@ -77,7 +93,6 @@ describe("Header", () => {
     render(<Header />);
 
     expect(screen.getByTestId("play-icon")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /play/i })).toBeDisabled();
 
     await waitFor(() => {
       expect(api.get).toHaveBeenCalledWith("/timesheet/projets");

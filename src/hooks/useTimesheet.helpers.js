@@ -79,10 +79,6 @@ export const isAddEntryFormValid = (form) => {
   return Boolean(form.projet_id && form.start_time && form.end_time);
 };
 
-export const getTotalHeures = (entries) => {
-  return entries.reduce((sum, entry) => sum + parseFloat(entry.heures || 0), 0);
-};
-
 export const groupEntriesByDate = (entries) => {
   return entries.reduce((groups, entry) => {
     const dateKey = toLocalDateString(entry.start_time);
@@ -92,40 +88,4 @@ export const groupEntriesByDate = (entries) => {
       [dateKey]: [...(groups[dateKey] || []), entry],
     };
   }, {});
-};
-
-export const getDayStats = (entries, date = new Date()) => {
-  const day = toLocalDateString(date);
-  const dayEntries = entries.filter((entry) => toLocalDateString(entry.start_time) === day);
-
-  return getEntriesStats(dayEntries);
-};
-
-export const getWeekStats = (entries) => {
-  const stats = getEntriesStats(entries);
-  const montant = entries.reduce((acc, entry) => {
-    const heures = Number(entry.heures || 0);
-    const taux = Number(entry.hourly_rate_used || 0);
-
-    return acc + heures * taux;
-  }, 0);
-
-  return {
-    ...stats,
-    montant,
-  };
-};
-
-const getEntriesStats = (entries) => {
-  const totalSeconds = entries.reduce((acc, entry) => acc + getEntrySeconds(entry), 0);
-  const facturableSeconds = entries
-    .filter((entry) => entry.is_billed)
-    .reduce((acc, entry) => acc + getEntrySeconds(entry), 0);
-  const projetsUniques = new Set(entries.map((entry) => entry.projet_id));
-
-  return {
-    totalSeconds,
-    facturableSeconds,
-    projetsTotal: projetsUniques.size,
-  };
 };

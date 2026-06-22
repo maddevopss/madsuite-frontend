@@ -1,7 +1,7 @@
 import { Modal, Button, StatusBadge } from "../../components/ui";
 import { formatCurrency, formatDate } from "../../utils/formatters";
 
-export default function ViewEstimateModal({ show, estimate, onClose, onConvert, onUpdateStatus, onDownload }) {
+export default function ViewEstimateModal({ show, estimate, onClose, onConvert, onConvertProject, onUpdateStatus, onDownload }) {
   if (!estimate) return null;
 
   return (
@@ -106,8 +106,13 @@ export default function ViewEstimateModal({ show, estimate, onClose, onConvert, 
               Télécharger PDF
             </Button>
           )}
+          {estimate.status === "accepted" && onConvertProject && (
+            <Button variant="primary" onClick={() => { onConvertProject(estimate.id); onClose(); }}>
+              Convertir en projet
+            </Button>
+          )}
           {estimate.status === "accepted" && onConvert && (
-            <Button variant="primary" onClick={() => { onConvert(estimate.id); onClose(); }}>
+            <Button variant="secondary" onClick={() => { onConvert(estimate.id); onClose(); }}>
               Convertir en facture
             </Button>
           )}

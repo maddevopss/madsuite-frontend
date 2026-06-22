@@ -37,4 +37,6 @@ describe("RefreshContext", () => {
       ).toBe("1");
     });
   });
-});
+})
+
+;

@@ -118,7 +118,16 @@ describe("useTimesheet", () => {
     api.get.mockImplementation((url) => {
       if (url.includes("/timesheet/projets")) return Promise.resolve({ data: mockProjets });
       if (url.includes("/timesheet/entries"))
-        return Promise.resolve({ data: { data: mockEntries, pagination: mockPagination } });
+        return Promise.resolve({ 
+          data: { 
+            data: mockEntries, 
+            pagination: mockPagination, 
+            stats: { 
+              today: { totalSeconds: 0, facturableSeconds: 0, projetsTotal: 0 }, 
+              week: { totalSeconds: 7200, facturableSeconds: 0, projetsTotal: 1, montant: 200 } 
+            } 
+          } 
+        });
       return Promise.resolve({ data: [] });
     });
   });
@@ -392,11 +401,6 @@ describe("useTimesheet", () => {
     expect(typeof result.current.weekStats.montant).toBe("number");
   });
 
-  test("totalHeures est la somme des heures des entrées", async () => {
-    const { result } = await renderUseTimesheet();
-
-    expect(result.current.totalHeures).toBe(2);
-  });
 
   test("groupedEntries regroupe les entrées par date", async () => {
     const { result } = await renderUseTimesheet();

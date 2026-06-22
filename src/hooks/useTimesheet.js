@@ -16,12 +16,9 @@ import {
   buildEntriesQuery,
   getAddEntryPayload,
   getClientsFromProjets,
-  getDayStats,
   getEditEntryPayload,
   getEditFormFromEntry,
   getEmptyEntryForm,
-  getTotalHeures,
-  getWeekStats,
   groupEntriesByDate,
   isAddEntryFormValid,
   shiftWeek,
@@ -50,6 +47,7 @@ export function useTimesheet(filterUser = "") {
   const [filterBilled, setFilterBilledState] = useState("");
   const [editForm, setEditForm] = useState(getEmptyEntryForm);
   const [addForm, setAddForm] = useState(getEmptyEntryForm);
+  const [stats, setStats] = useState({ today: {}, week: {} });
   const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
 
   const currentPage = pagination?.page ?? 1;
@@ -73,6 +71,7 @@ export function useTimesheet(filterUser = "") {
       const result = await loadTimesheetEntries(queryString);
 
       setEntries(result.data);
+      if (result.stats) setStats(result.stats);
       setPagination(result.pagination);
     } catch (err) {
       showToast("Erreur lors du chargement des entrées.", "error");
@@ -216,10 +215,9 @@ export function useTimesheet(filterUser = "") {
     [editForm, fetchEntries, refreshAppData, showToast],
   );
 
-  const totalHeures = useMemo(() => getTotalHeures(entries), [entries]);
   const groupedEntries = useMemo(() => groupEntriesByDate(entries), [entries]);
-  const todayStats = useMemo(() => getDayStats(entries), [entries]);
-  const weekStats = useMemo(() => getWeekStats(entries), [entries]);
+  const todayStats = stats.today;
+  const weekStats = stats.week;
 
   return {
     weekDate,
@@ -246,7 +244,6 @@ export function useTimesheet(filterUser = "") {
     deleteEntry,
     saveNewEntry,
     saveEditEntry,
-    totalHeures,
     groupedEntries,
     todayStats,
     weekStats,

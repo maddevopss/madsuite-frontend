@@ -38,7 +38,7 @@ export default function BehavioralTimeline({ sessionLogs = [], totalDurationSeco
 
   if (segments.length === 0) {
     return (
-      <div style={{ color: 'var(--color-text-muted)', fontStyle: 'italic', textAlign: 'center', padding: '20px' }}>
+      <div style={{ color: 'var(--color-text-secondary)', fontStyle: 'italic', textAlign: 'center', padding: '20px' }}>
         Pas assez de données pour reconstruire la timeline.
       </div>
     );
@@ -46,7 +46,7 @@ export default function BehavioralTimeline({ sessionLogs = [], totalDurationSeco
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>
         <span>Début</span>
         <span>Fin</span>
       </div>

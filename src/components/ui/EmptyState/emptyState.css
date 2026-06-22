@@ -1,10 +1,10 @@
 .ui-empty-state {
   padding: 32px;
   text-align: center;
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   border: 1px dashed var(--color-border);
   border-radius: var(--radius-lg);
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
 }
 
 .ui-empty-state h3 {

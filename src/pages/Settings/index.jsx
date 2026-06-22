@@ -12,6 +12,7 @@ import SettingsStripeConnectCard from "./SettingsStripeConnectCard";
 import SettingsHubCard from "./SettingsHubCard";
 import MasterAdminCard from "./MasterAdminCard";
 import DesktopPrivacySettings from "./DesktopPrivacySettings";
+import SettingsAccountingExportCard from "./SettingsAccountingExportCard";
 
 import { useAuth } from "../../api/authContext";
 import { useSettings } from "../../hooks/useSettings";
@@ -54,6 +55,8 @@ export default function Settings() {
         <SettingsInteracCard />
         
         <SettingsStripeConnectCard />
+
+        <SettingsAccountingExportCard />
 
         <SettingsSubscriptionCard />
 

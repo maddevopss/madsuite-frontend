@@ -15,6 +15,8 @@ import AutoTimesheetModal from "./AutoTimesheetModal";
 
 import { useTimesheet } from "../../hooks/useTimesheet";
 import { useModal } from "../../hooks/useModal";
+import { useCognitiveBudget } from "../../hooks/useCognitiveBudget";
+import AdaptivePanel from "../../components/ui/AdaptivePanel";
 
 export default function Timesheet() {
   const [searchParams] = useSearchParams();
@@ -22,6 +24,18 @@ export default function Timesheet() {
   const addModal = useModal();
   const editModal = useModal();
   const [showAutoFill, setShowAutoFill] = useState(false);
+
+  useCognitiveBudget({
+    pageName: 'Timesheet',
+    budget: { maxScore: 35 },
+    metrics: {
+      visibleActions: 4, 
+      visibleColors: 2,
+      animationsActive: 0,
+      competingCTAs: 0, 
+      visiblePanels: 3,
+    }
+  });
 
   const {
     weekDate,
@@ -104,8 +118,10 @@ export default function Timesheet() {
       <div className="view active" id="view-timesheet">
         <TimesheetHeader weekDate={weekDate} onPrevWeek={prevWeek} onNextWeek={nextWeek} />
 
-        <TimesheetStats stats={todayStats} />
-        <TimesheetWeekStats stats={weekStats} />
+        <AdaptivePanel hideOnOverload={true}>
+          <TimesheetStats stats={todayStats} />
+          <TimesheetWeekStats stats={weekStats} />
+        </AdaptivePanel>
 
         <TimesheetFilters
           clients={clients}

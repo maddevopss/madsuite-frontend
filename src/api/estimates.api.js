@@ -43,3 +43,9 @@ export const downloadEstimatePdf = async (id) => {
   });
   return response.data;
 };
+
+// POST /api/estimates/:id/convert-project
+export const convertEstimateToProject = async (id) => {
+  const res = await api.post(`/estimates/${id}/convert-project`);
+  return res.data;
+};

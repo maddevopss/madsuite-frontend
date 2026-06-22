@@ -1,104 +1,50 @@
 import { render, screen } from "@testing-library/react";
 import Dashboard from "../pages/Dashboard";
-import { useDashboard } from "../hooks/useDashboard";
+import { useBillingDashboard } from "../hooks/useBillingDashboard";
+import { useEstimates } from "../hooks/useEstimates";
+import { MemoryRouter } from "react-router-dom";
 
-jest.mock("../hooks/useDashboard");
-
-jest.mock("../hooks/useReportData", () => ({
-  useMonthlyData: jest.fn().mockReturnValue({ data: null, isLoading: false, error: null }),
+/* =========================
+   MOCK HOOKS
+========================= */
+jest.mock("../hooks/useBillingDashboard", () => ({
+  useBillingDashboard: jest.fn(() => ({
+    loading: false,
+    total_paid_this_month: 1500,
+    unbilled_hours: 12.5,
+    invoiceStatus: {
+      sent: { count: 2 },
+      overdue: { count: 1 }
+    },
+    refresh: jest.fn(),
+  })),
 }));
 
-jest.mock("../pages/Dashboard/DashboardMetrics", () => (props) => (
-  <div>
-    <h2>Metrics</h2>
-    <span data-testid="semaine">{props.stats.semaine}</span>
-  </div>
+jest.mock("../hooks/useEstimates", () => ({
+  useEstimates: jest.fn(() => ({
+    estimates: [
+      { id: 1, status: 'draft' },
+      { id: 2, status: 'sent' }
+    ],
+    loading: false,
+    loadEstimates: jest.fn(),
+  })),
+}));
+
+/* =========================
+   MOCK COMPONENTS
+========================= */
+jest.mock("../components/onboarding/SampleDataGenerator", () => () => (
+  <div data-testid="sample-data-generator">Sample Data Generator</div>
 ));
 
-jest.mock("../pages/Dashboard/DashboardCharts", () => () => (
-  <div>
-    <h2>Charts</h2>
-  </div>
-));
-
-jest.mock("../pages/Dashboard/DashboardClientTime", () => () => (
-  <div>
-    <h2>Clients</h2>
-  </div>
-));
-
-jest.mock("../pages/Dashboard/DashboardActiveTimer", () => () => (
-  <div>
-    <h2>Timer actif</h2>
-  </div>
-));
-
-jest.mock("../pages/Dashboard/DashboardActivityIntelligence", () => () => (
-  <div>
-    <h2>Activité</h2>
-  </div>
-));
-
-jest.mock("../components/activity/ActivitySummary", () => () => (
-  <div>
-    <h2>Résumé activité</h2>
-  </div>
-));
-
-jest.mock("../pages/Dashboard/BillingDashboardCockpit", () => () => (
-  <div>
-    <h2>Facturation</h2>
-  </div>
-));
-
+/* =========================
+   SETUP
+========================= */
 beforeEach(() => {
   jest.clearAllMocks();
-
   jest.spyOn(console, "warn").mockImplementation(() => {});
   jest.spyOn(console, "error").mockImplementation(() => {});
-
-  useDashboard.mockReturnValue({
-    stats: {
-      semaine: 10,
-      mois: 40,
-      facturable: 8,
-      montant_a_facturer: 600,
-    },
-
-    loading: false,
-
-    parClient: [
-      {
-        client: "Client Test",
-        heures: 5,
-      },
-    ],
-
-    parJour: [
-      {
-        jour: "2026-05-20",
-        heures: 2.5,
-      },
-    ],
-
-    maxHeures: 5,
-
-    chartData: [
-      {
-        jour: "mer.",
-        heures: 2.5,
-      },
-    ],
-
-    activitySummary: [
-      {
-        app_name: "VSCode",
-        duration_seconds: 3600,
-      },
-    ],
-
-    fetchStats: jest.fn(),
-  });
 });
 
 afterEach(() => {
@@ -106,24 +52,63 @@ afterEach(() => {
   console.error.mockRestore();
 });
 
+/* =========================
+   TESTS
+========================= */
 describe("Dashboard page", () => {
-  test("affiche dashboard", () => {
-    render(<Dashboard />);
+  test("affiche le loader quand loading est true", () => {
+    useBillingDashboard.mockReturnValue({ loading: true, refresh: jest.fn() });
+    useEstimates.mockReturnValue({ estimates: [], loading: false, loadEstimates: jest.fn() });
 
-    expect(screen.getByText("Bienvenue sur le tableau de bord")).toBeInTheDocument();
+    render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>
+    );
 
-    expect(screen.getByText("Metrics")).toBeInTheDocument();
-
-    expect(screen.getByText("Timer actif")).toBeInTheDocument();
-
-    expect(screen.getByText("Activité")).toBeInTheDocument();
-
-    expect(screen.getByText("Résumé activité")).toBeInTheDocument();
+    expect(screen.getByText(/Chargement du tableau de bord/i)).toBeInTheDocument();
   });
 
-  test("transmet statistiques", () => {
-    render(<Dashboard />);
+  test("affiche les métriques du dashboard SaaS", () => {
+    useBillingDashboard.mockReturnValue({
+      loading: false,
+      total_paid_this_month: 1500,
+      unbilled_hours: 12.5,
+      invoiceStatus: {
+        sent: { count: 2 },
+        overdue: { count: 1 }
+      },
+      refresh: jest.fn(),
+    });
 
-    expect(screen.getByTestId("semaine").textContent).toBe("10");
+    useEstimates.mockReturnValue({
+      estimates: [
+        { id: 1, status: 'draft' },
+        { id: 2, status: 'sent' }
+      ],
+      loading: false,
+      loadEstimates: jest.fn(),
+    });
+
+    render(
+      <MemoryRouter>
+        <Dashboard />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText(/Tableau de bord/i)).toBeInTheDocument();
+    
+    // Vérifier les 4 cartes principales
+    expect(screen.getByText(/Revenus \(Ce mois\)/i)).toBeInTheDocument();
+    expect(screen.getByText("1 500,00 $")).toBeInTheDocument(); // 1500 formatMoney (approx)
+    
+    expect(screen.getByText(/Factures en attente/i)).toBeInTheDocument();
+    expect(screen.getByText("3")).toBeInTheDocument(); // sent(2) + overdue(1) = 3
+    
+    expect(screen.getByText(/Devis en attente/i)).toBeInTheDocument();
+    expect(screen.getByText("2")).toBeInTheDocument(); // 2 estimates in mock
+    
+    expect(screen.getByText(/Heures Facturables/i)).toBeInTheDocument();
+    expect(screen.getByText("12.5h")).toBeInTheDocument();
   });
 });

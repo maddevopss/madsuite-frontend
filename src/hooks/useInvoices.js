@@ -99,6 +99,38 @@ export function useInvoices() {
     [showToast],
   );
 
+  const fetchPortalLink = useCallback(
+    async (id) => {
+      try {
+        setLoading(true);
+        const { getInvoicePortalLink } = require("../api/invoices.api");
+        return await getInvoicePortalLink(id);
+      } catch (err) {
+        showToast(getApiErrorMessage(err, "Impossible de récupérer le lien du portail."), "error");
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [showToast]
+  );
+
+  const checkoutInvoiceHook = useCallback(
+    async (id) => {
+      try {
+        setLoading(true);
+        const { checkoutInvoice } = require("../api/invoices.api");
+        return await checkoutInvoice(id);
+      } catch (err) {
+        showToast(getApiErrorMessage(err, "Impossible de rediriger vers Stripe."), "error");
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [showToast]
+  );
+
   return {
     invoices,
     loading,
@@ -107,6 +139,8 @@ export function useInvoices() {
     addInvoice,
     saveInvoice,
     removeInvoice,
+    fetchPortalLink,
+    checkoutInvoice: checkoutInvoiceHook,
   };
 }
 

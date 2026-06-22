@@ -8,9 +8,10 @@ import { STATUS_COLORS, STATUS_LABELS } from "../pages/Invoices/invoiceStatus";
 
 jest.mock("../api/invoices.api", () => ({
   getUnbilledInvoiceEntries: jest.fn(),
+  getUnbilledExpenses: jest.fn().mockResolvedValue([]),
 }));
 
-const { getUnbilledInvoiceEntries } = require("../api/invoices.api");
+const { getUnbilledInvoiceEntries, getUnbilledExpenses } = require("../api/invoices.api");
 
 const invoice = {
   id: 7,
@@ -99,7 +100,7 @@ describe("Invoice components", () => {
     expect(screen.getByText("Note test")).toBeInTheDocument();
     expect(screen.getByText("Total")).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: /télécharger pdf/i }));
+    fireEvent.click(screen.getByRole("button", { name: /download pdf/i }));
 
     expect(onDownloadPDF).toHaveBeenCalledWith(7);
   });

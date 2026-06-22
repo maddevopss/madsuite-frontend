@@ -31,7 +31,7 @@ export default function RescueModal({ show, onClose }) {
         {step === 1 ? (
           <>
             <h2 style={{ fontSize: "1.5rem", marginBottom: "1rem" }}>Respire. Tout va bien.</h2>
-            <p style={{ marginBottom: "2rem", color: "var(--color-text-muted)" }}>
+            <p style={{ marginBottom: "2rem", color: "var(--color-text-secondary)" }}>
               L'éparpillement arrive à tout le monde. Laisse tout le reste de côté pour l'instant.
             </p>
             <button

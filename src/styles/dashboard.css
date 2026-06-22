@@ -15,7 +15,7 @@
   margin-bottom: 20px;
 }
 .metric {
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
   border-radius: var(--radius-md);
   padding: 12px 14px;
 }
@@ -42,7 +42,7 @@
   gap: 12px;
 }
 .card {
-  border: 0.5px solid var(--color-border-strong);
+  border: 0.5px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: 14px 16px;
 }
@@ -59,7 +59,7 @@
   align-items: center;
   gap: 10px;
   padding: 7px 0;
-  border-bottom: 0.5px solid var(--color-border-strong);
+  border-bottom: 0.5px solid var(--color-border);
 }
 .client-row:last-child {
   border-bottom: none;
@@ -82,7 +82,7 @@
 .client-bar-wrap {
   width: 60px;
   height: 4px;
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
   border-radius: 2px;
 }
 .client-bar {
@@ -164,7 +164,7 @@
 
   padding: 4px 10px;
 
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
   color: var(--color-text-primary);
 
   font-size: 0.75rem;
@@ -180,7 +180,7 @@
   padding: 16px;
 
   border-radius: var(--radius-md);
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
   color: var(--color-text-primary);
 }
 
@@ -198,7 +198,7 @@
 .activity-kpi-card {
   padding: 16px;
   border-radius: var(--radius-md);
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
   color: var(--color-text-primary);
 }
 
@@ -216,14 +216,14 @@
   margin: 20px 0;
   padding: 16px;
   border-radius: var(--radius-md);
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
 }
 
 .top-distraction-row {
   display: flex;
   justify-content: space-between;
   padding: 10px 0;
-  border-bottom: 1px solid var(--color-border-strong);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .top-distraction-row:last-child {
@@ -234,14 +234,14 @@
   margin: 20px 0;
   padding: 16px;
   border-radius: var(--radius-md);
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
 }
 
 .top-productive-row {
   display: flex;
   justify-content: space-between;
   padding: 10px 0;
-  border-bottom: 1px solid var(--color-border-strong);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .top-productive-row:last-child {
@@ -335,10 +335,10 @@
 
 .billing-status-strip span {
   padding: 6px 10px;
-  border: 1px solid var(--color-border-strong);
+  border: 1px solid var(--color-border);
   border-radius: 999px;
-  background: var(--color-surface-strong);
-  color: var(--color-text-muted);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
   font-size: 0.8rem;
 }
 
@@ -362,7 +362,7 @@
   gap: 12px;
   min-width: 0;
   padding: 8px 0;
-  border-bottom: 1px solid var(--color-border-strong);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .billing-row:last-child {

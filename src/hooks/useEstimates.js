@@ -103,6 +103,20 @@ export function useEstimates() {
     }
   }, [showToast]);
 
+  const convertToProject = useCallback(async (id) => {
+    setLoading(true);
+    try {
+      const res = await api.convertEstimateToProject(id);
+      showToast("Soumission convertie en projet avec succès.", "success");
+      return res.data;
+    } catch (err) {
+      showToast(getApiErrorMessage(err, "Erreur lors de la conversion."), "error");
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [showToast]);
+
   return {
     estimates,
     loading,
@@ -112,6 +126,7 @@ export function useEstimates() {
     saveEstimate,
     removeEstimate,
     convertToInvoice,
+    convertToProject,
     downloadPdf
   };
 }

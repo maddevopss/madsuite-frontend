@@ -68,7 +68,7 @@ function DashboardMetrics({ stats = {} }) {
         }}>
           <div style={{ color: 'var(--color-text-secondary)', fontSize: '13px', fontWeight: 500 }}>Focus Blocks</div>
           <div style={{ color: 'var(--color-primary)', fontSize: '28px', fontWeight: 700, lineHeight: 1 }}>4</div>
-          <div style={{ color: 'var(--color-text-muted)', fontSize: '13px' }}>Cycles profonds complétés</div>
+          <div style={{ color: 'var(--color-text-secondary)', fontSize: '13px' }}>Cycles profonds complétés</div>
         </Card>
 
         <Card style={{ 
@@ -81,7 +81,7 @@ function DashboardMetrics({ stats = {} }) {
         }}>
           <div style={{ color: 'var(--color-text-secondary)', fontSize: '13px', fontWeight: 500 }}>Fragmentation</div>
           <div style={{ color: 'var(--color-warning)', fontSize: '28px', fontWeight: 700, lineHeight: 1 }}>Faible</div>
-          <div style={{ color: 'var(--color-text-muted)', fontSize: '13px' }}>Interruptions cognitives</div>
+          <div style={{ color: 'var(--color-text-secondary)', fontSize: '13px' }}>Interruptions cognitives</div>
         </Card>
 
         <Card style={{ 
@@ -94,7 +94,7 @@ function DashboardMetrics({ stats = {} }) {
         }}>
           <div style={{ color: 'var(--color-text-secondary)', fontSize: '13px', fontWeight: 500 }}>Recovery Speed</div>
           <div style={{ color: 'var(--color-success)', fontSize: '28px', fontWeight: 700, lineHeight: 1 }}>Rapide</div>
-          <div style={{ color: 'var(--color-text-muted)', fontSize: '13px' }}>~3 min pour se recentrer</div>
+          <div style={{ color: 'var(--color-text-secondary)', fontSize: '13px' }}>~3 min pour se recentrer</div>
         </Card>
       </div>
 

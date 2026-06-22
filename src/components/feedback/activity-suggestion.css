@@ -9,7 +9,7 @@
   padding: 16px;
   border-radius: 16px;
   border: 1px solid var(--color-border);
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
   color: var(--color-text-primary);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
 }
@@ -29,7 +29,7 @@
 }
 
 .activity-suggestion-content small {
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
 }
 
 .activity-suggestion-actions {
@@ -51,7 +51,7 @@
 
 .activity-suggestion-actions button.secondary {
   background: var(--color-surface-muted);
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
 }
 
 .activity-suggestion-badge {
@@ -59,9 +59,9 @@
   align-items: center;
   padding: 6px 10px;
   border-radius: 999px;
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   font-size: 0.8rem;
   font-weight: 600;
 }

@@ -20,8 +20,8 @@ body {
 }
 
 select {
-  background: var(--color-surface-strong);
-  border: 0.5px solid var(--color-border-strong);
+  background: var(--color-surface);
+  border: 0.5px solid var(--color-border);
   border-radius: var(--radius-md);
   color: var(--color-text-primary);
   padding: 6px 10px;
@@ -32,7 +32,7 @@ select {
 button {
   min-width: 100px;
   min-height: 35px;
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
   border: none;
   color: var(--color-text-primary);
   padding: 7px 7px;

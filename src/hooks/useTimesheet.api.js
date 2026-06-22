@@ -11,6 +11,7 @@ export const loadTimesheetEntries = async (queryString) => {
 
   return {
     data: res.data?.data || [],
+    stats: res.data?.stats,
     pagination: {
       page: res.data?.pagination?.page || 1,
       limit: res.data?.pagination?.limit || 50,

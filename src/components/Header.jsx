@@ -1,15 +1,15 @@
-import { memo, useCallback, useEffect, useMemo } from "react";
+import { memo } from "react";
 import logo from "../assets/logo.png";
 import { PlayIcon, PauseIcon, BsSun, BsMoon } from "../assets/Icon/idx_icon";
-import { useTimer } from "../TimerContext";
 import { useTheme } from "../ThemeContext";
-import api from "../api/api";
 import ActivitySuggestionBadge from "./activity-intelligence/ActivitySuggestionBadge";
 import FocusTunnel from "../pages/Dashboard/FocusTunnel";
 import AnchorRitualModal from "./AnchorRitualModal";
 import CognitiveMirrorModal from "./CognitiveMirrorModal";
-import "./layout/header.css";
+import { useHeaderState } from "../hooks/useHeaderState";
+import { useNotifications } from "../hooks/useNotifications";
 import { useState } from "react";
+import "./layout/header.css";
 
 const ResumeProjectButton = memo(function ResumeProjectButton({ project, onResume }) {
   return (
@@ -30,156 +30,34 @@ const ResumeProjectButton = memo(function ResumeProjectButton({ project, onResum
 
 export default function Header() {
   const { theme, toggleTheme } = useTheme();
-  const {
-    isRunning,
-    description,
-    setDescription,
-    selectedClient,
-    setSelectedClient,
-    selectedProjet,
-    setSelectedProjet,
-    clients,
-    projetsFiltres,
-    toggleTimer,
-    elapsedFormatted,
-    setProjets,
-    activeEntry,
-    todayProjects,
-    resumeProject,
-    note,
-    updateNote,
-    setNote,
-    isLongRunning,
-    activeTimerWarning,
-    stopActiveTimer,
-  } = useTimer();
-
-  const elapsedSeconds = useTimer().elapsed || 0;
-  const progressPercent = useMemo(() => {
-    if (!isRunning) return 0;
-    return Math.min(100, (elapsedSeconds % 3600) / 3600 * 100);
-  }, [isRunning, elapsedSeconds]);
-
-  const [showFocusTunnel, setShowFocusTunnel] = useState(false);
-  const [showAnchorRitual, setShowAnchorRitual] = useState(false);
-  const [showCognitiveMirror, setShowCognitiveMirror] = useState(false);
-  const [mirrorData, setMirrorData] = useState({ intent: "", startTime: null, endTime: null });
-  const [isPulsing, setIsPulsing] = useState(false);
-
-  // Momentum Engine : Pulse effect if inactive for > 2 mins
-  useEffect(() => {
-    let timer;
-    if (!isRunning) {
-      timer = setTimeout(() => {
-        setIsPulsing(true);
-      }, 120000); // 2 minutes
-    } else {
-      setIsPulsing(false);
-    }
-    return () => clearTimeout(timer);
-  }, [isRunning]);
-
-  const handlePlayClick = () => {
-    if (!isRunning) {
-      if (!description || description.trim() === "") {
-        setShowAnchorRitual(true);
-      } else {
-        toggleTimer();
-      }
-    } else {
-      // Stopping the timer -> Show Cognitive Mirror
-      if (activeEntry && activeEntry.start_time) {
-        setMirrorData({
-          intent: description,
-          startTime: activeEntry.start_time,
-          endTime: new Date().toISOString()
-        });
-        setShowCognitiveMirror(true);
-      }
-      toggleTimer();
-    }
-  };
-
-  const handleAnchorConfirm = (action, duration) => {
-    setDescription(action);
-    setShowAnchorRitual(false);
-    // On ajoute un timeout léger pour laisser le state description se propager (ou on lance direct)
-    setTimeout(() => {
-      if (!isRunning) toggleTimer();
-    }, 50);
-  };
-
-  const loadProjets = useCallback(async () => {
-    try {
-      const res = await api.get("/timesheet/projets");
-      setProjets(res.data || []);
-    } catch (err) {
-      console.error("LOAD TIMER PROJECTS:", err);
-    }
-  }, [setProjets]);
-
-  const visibleTodayProjects = useMemo(() => todayProjects.slice(0, 4), [todayProjects]);
-  const handleClientChange = useCallback(
-    (e) => {
-      setSelectedClient(e.target.value);
-      setSelectedProjet("");
-    },
-    [setSelectedClient, setSelectedProjet],
-  );
-  const handleProjetChange = useCallback((e) => setSelectedProjet(e.target.value), [setSelectedProjet]);
-  const handleSaveNote = useCallback(() => updateNote(note), [note, updateNote]);
-
-  useEffect(() => {
-    loadProjets();
-
-    window.addEventListener("focus", loadProjets);
-    window.addEventListener("projects-updated", loadProjets);
-
-    return () => {
-      window.removeEventListener("focus", loadProjets);
-      window.removeEventListener("projects-updated", loadProjets);
-    };
-  }, [loadProjets]);
-
-  useEffect(() => {
-    if (!selectedClient || isRunning) return;
-
-    const loadClientProjects = async () => {
-      try {
-        const res = await api.get(`/projets/client/${selectedClient}`);
-        setProjets(res.data || []);
-      } catch (err) {
-        console.error("LOAD CLIENT PROJECTS:", err.response?.data || err.message);
-      }
-    };
-
-    loadClientProjects();
-  }, [selectedClient, isRunning, setProjets]);
+  const { state, actions } = useHeaderState();
+  const { notifications, unreadCount, markAsRead } = useNotifications();
+  const [showNotifications, setShowNotifications] = useState(false);
 
   return (
     <header className="header">
       <div
         className="timer-project-dot"
         style={{
-          background: activeEntry?.projet_couleur,
+          background: state.activeEntry?.projet_couleur,
         }}
       />
 
       <img src={logo} className="App-logo" alt="logo" />
 
       <div className="timer-bar">
-        {isRunning && (
+        {state.isRunning && (
           <div 
             className="timer-visual-progress" 
-            style={{ width: `${progressPercent}%` }} 
+            style={{ width: `${state.progressPercent}%` }} 
           />
         )}
-        <div className={`timer-status ${isRunning ? "running" : "idle"}`} />
+        <div className={`timer-status ${state.isRunning ? "running" : "idle"}`} />
 
-        {!isRunning && visibleTodayProjects.length > 0 && (
+        {!state.isRunning && state.visibleTodayProjects.length > 0 && (
           <div className="resume-projects">
-            {visibleTodayProjects.map((p) => (
-              <ResumeProjectButton key={p.projet_id} project={p} onResume={resumeProject} />
+            {state.visibleTodayProjects.map((p) => (
+              <ResumeProjectButton key={p.projet_id} project={p} onResume={actions.resumeProject} />
             ))}
           </div>
         )}
@@ -187,43 +65,43 @@ export default function Header() {
         <input
           className="timer-input"
           placeholder="Mon objectif (ex: 'Écrire 1 phrase', 'Ouvrir Figma') :"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          disabled={isRunning}
+          value={state.description}
+          onChange={(e) => actions.setDescription(e.target.value)}
+          disabled={state.isRunning}
         />
 
-        {isRunning && isLongRunning && activeTimerWarning && (
+        {state.isRunning && state.isLongRunning && state.activeTimerWarning && (
           <div className="timer-warning">
-            <div className="timer-warning__text">⚠️ {activeTimerWarning}</div>
+            <div className="timer-warning__text">⚠️ {state.activeTimerWarning}</div>
 
-            <button type="button" className="timer-warning__button" onClick={stopActiveTimer}>
+            <button type="button" className="timer-warning__button" onClick={actions.stopActiveTimer}>
               Terminer maintenant
             </button>
           </div>
         )}
 
-        {isRunning && activeEntry && (
+        {state.isRunning && state.activeEntry && (
           <div className="timer-note">
             <input
               type="text"
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
+              value={state.note}
+              onChange={(e) => actions.setNote(e.target.value)}
               placeholder="Note rapide sur le timer actif..."
               className="timer-note__input"
             />
 
-            <button type="button" className="timer-note__button" onClick={handleSaveNote}>
+            <button type="button" className="timer-note__button" onClick={actions.handleSaveNote}>
               Sauvegarder
             </button>
           </div>
         )}
 
         <select
-          value={selectedClient || ""}
-          onChange={handleClientChange}
-          disabled={isRunning}>
+          value={state.selectedClient || ""}
+          onChange={actions.handleClientChange}
+          disabled={state.isRunning}>
           <option value="">Client</option>
-          {(clients || []).map((c) => (
+          {(state.clients || []).map((c) => (
             <option key={c.id} value={c.id}>
               {c.nom}
             </option>
@@ -231,37 +109,37 @@ export default function Header() {
         </select>
 
         <select
-          value={selectedProjet || ""}
-          onChange={handleProjetChange}
-          disabled={isRunning || !selectedClient}>
+          value={state.selectedProjet || ""}
+          onChange={actions.handleProjetChange}
+          disabled={state.isRunning || !state.selectedClient}>
           <option value="">Projet</option>
-          {(projetsFiltres || []).map((p) => (
+          {(state.projetsFiltres || []).map((p) => (
             <option key={p.id || p.projet_id} value={p.id || p.projet_id}>
               {p.projet || p.projet_nom || p.nom}
             </option>
           ))}
         </select>
 
-        {activeEntry && (
+        {state.activeEntry && (
           <div className="timer-active-project">
-            <span>{activeEntry.projet_nom}</span>
+            <span>{state.activeEntry.projet_nom}</span>
           </div>
         )}
 
         <button 
           className="timer-play" 
-          onClick={handlePlayClick}
-          style={isPulsing ? { animation: 'pulse-primary 2s infinite', boxShadow: '0 0 15px rgba(var(--color-primary-rgb), 0.5)' } : {}}
+          onClick={actions.handlePlayClick}
+          style={state.isPulsing ? { animation: 'pulse-primary 2s infinite', boxShadow: '0 0 15px rgba(var(--color-primary-rgb), 0.5)' } : {}}
         >
-          {isRunning ? <PauseIcon /> : <PlayIcon />}
+          {state.isRunning ? <PauseIcon /> : <PlayIcon />}
         </button>
 
         <div className="timer-live">
-          <span className="timer-live-time">{elapsedFormatted}</span>
+          <span className="timer-live-time">{state.elapsedFormatted}</span>
 
-          {isRunning && activeEntry && (
+          {state.isRunning && state.activeEntry && (
             <span className="timer-live-project">
-              {activeEntry.client_nom} / {activeEntry.projet_nom}
+              {state.activeEntry.client_nom} / {state.activeEntry.projet_nom}
             </span>
           )}
         </div>
@@ -275,12 +153,52 @@ export default function Header() {
           {theme === "dark" ? <BsSun size={20} /> : <BsMoon size={20} />}
         </button>
 
+        <div style={{ position: "relative" }}>
+          <button 
+            onClick={() => setShowNotifications(!showNotifications)}
+            style={{ background: "none", border: "none", cursor: "pointer", fontSize: "20px", position: "relative" }}
+          >
+            🔔
+            {unreadCount > 0 && (
+              <span style={{ position: "absolute", top: "-5px", right: "-5px", background: "red", color: "white", borderRadius: "50%", padding: "2px 6px", fontSize: "10px", fontWeight: "bold" }}>
+                {unreadCount}
+              </span>
+            )}
+          </button>
+          
+          {showNotifications && (
+            <div style={{ position: "absolute", top: "100%", right: "0", width: "300px", background: "var(--bg-panel)", border: "1px solid var(--border-color)", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)", zIndex: 1000, maxHeight: "400px", overflowY: "auto" }}>
+              <div style={{ padding: "10px", fontWeight: "bold", borderBottom: "1px solid var(--border-color)", background: "var(--bg-secondary)", borderRadius: "8px 8px 0 0" }}>Notifications</div>
+              {notifications.length === 0 ? (
+                <div style={{ padding: "15px", textAlign: "center", color: "var(--text-secondary)" }}>Aucune notification</div>
+              ) : (
+                notifications.map((n) => (
+                  <div 
+                    key={n.id} 
+                    style={{ padding: "12px", borderBottom: "1px solid var(--border-color)", opacity: n.is_read ? 0.6 : 1, cursor: n.is_read ? "default" : "pointer" }}
+                    onClick={() => { if(!n.is_read) markAsRead(n.id); }}
+                  >
+                    <div style={{ fontSize: "12px", color: "var(--text-secondary)", marginBottom: "4px" }}>{new Date(n.created_at).toLocaleString('fr-FR')}</div>
+                    <div style={{ fontSize: "14px", color: "var(--text-primary)" }}>{n.message}</div>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+        </div>
+
         <ActivitySuggestionBadge />
+
+        {state.syncPendingCount > 0 && (
+          <div title="Données en attente de synchronisation locale" style={{ color: "var(--color-warning)", fontWeight: "bold", fontSize: "0.85rem", marginLeft: "12px", display: "flex", alignItems: "center", background: "rgba(255,165,0,0.1)", padding: "4px 8px", borderRadius: "8px" }}>
+            ☁️ Sync: {state.syncPendingCount} pending
+          </div>
+        )}
         
-        {isRunning && (
+        {state.isRunning && (
           <button 
             className="theme-toggle" 
-            onClick={() => setShowFocusTunnel(true)} 
+            onClick={() => actions.setShowFocusTunnel(true)} 
             title="Entrer dans le tunnel"
             style={{ background: "var(--color-danger)", color: "white", borderRadius: "16px", padding: "4px 12px", border: "none", cursor: "pointer", fontWeight: "bold", fontSize: "0.85rem", marginLeft: "8px" }}
           >
@@ -289,18 +207,18 @@ export default function Header() {
         )}
       </div>
 
-      <FocusTunnel show={showFocusTunnel} onClose={() => setShowFocusTunnel(false)} />
+      <FocusTunnel show={state.showFocusTunnel} onClose={() => actions.setShowFocusTunnel(false)} />
       <AnchorRitualModal 
-        show={showAnchorRitual} 
-        onClose={() => setShowAnchorRitual(false)} 
-        onConfirm={handleAnchorConfirm} 
+        show={state.showAnchorRitual} 
+        onClose={() => actions.setShowAnchorRitual(false)} 
+        onConfirm={actions.handleAnchorConfirm} 
       />
       <CognitiveMirrorModal
-        show={showCognitiveMirror}
-        onClose={() => setShowCognitiveMirror(false)}
-        intent={mirrorData.intent}
-        startTime={mirrorData.startTime}
-        endTime={mirrorData.endTime}
+        show={state.showCognitiveMirror}
+        onClose={() => actions.setShowCognitiveMirror(false)}
+        intent={state.mirrorData.intent}
+        startTime={state.mirrorData.startTime}
+        endTime={state.mirrorData.endTime}
       />
     </header>
   );

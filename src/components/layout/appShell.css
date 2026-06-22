@@ -5,11 +5,12 @@
 
 .container {
   display: flex;
-  min-height: calc(100vh - 86px);
+  min-height: calc(100vh - 72px);
+  background: var(--color-background);
 }
 
 .main {
   flex: 1;
   min-width: 0;
-  padding: 20px;
+  padding: var(--spacing-xl);
 }

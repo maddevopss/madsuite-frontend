@@ -1,19 +1,21 @@
 .ui-card {
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   padding: var(--spacing-lg);
   color: var(--color-text-primary);
+  /* Cognitive constraint: No deep shadows, simple clear borders */
 }
 
 .ui-card-title {
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 600;
   margin-bottom: var(--spacing-md);
+  color: var(--color-text-primary);
 }
 
 .client-card-ui {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--spacing-md);
 }

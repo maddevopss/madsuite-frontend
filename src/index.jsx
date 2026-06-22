@@ -14,6 +14,7 @@ import { ToastProvider } from "./ToastContext";
 import { ActivitySuggestionProvider } from "./components/activity-intelligence/ActivitySuggestionContext";
 import { ThemeProvider } from "./ThemeContext";
 import { ModulesProvider } from "./hooks/useModules";
+import { CognitiveStateProvider } from "./context/CognitiveStateProvider";
 
 const queryClient = new QueryClient();
 
@@ -45,7 +46,9 @@ root.render(
               <ToastProvider>
                 <TimerProvider>
                   <ActivitySuggestionProvider>
-                    <App />
+                    <CognitiveStateProvider>
+                      <App />
+                    </CognitiveStateProvider>
                   </ActivitySuggestionProvider>
                 </TimerProvider>
               </ToastProvider>

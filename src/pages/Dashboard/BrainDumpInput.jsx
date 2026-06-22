@@ -54,7 +54,7 @@ export default function BrainDumpInput() {
       <div className="card-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         🧠 Bruit Mental (External Brain)
       </div>
-      <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '16px' }}>
+      <p style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', marginBottom: '16px' }}>
         Vide ton cerveau ici. L'IA va le transformer en micro-actions claires.
       </p>
 
@@ -147,7 +147,7 @@ export default function BrainDumpInput() {
                 >
                   <div>
                     <div style={{ fontWeight: 'bold' }}>{t.title}</div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>~{t.duration_minutes} min</div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>~{t.duration_minutes} min</div>
                   </div>
                   <Button size="sm" variant="primary" onClick={() => handleStartTask(t, idx)}>
                     ▶ Commencer

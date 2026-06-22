@@ -69,7 +69,7 @@ export default function RealitySplitBar({ chartData = [] }) {
           <h2 style={{ fontSize: '1.2rem', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
             🧠 Cognitive Flow Stability
           </h2>
-          <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+          <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: 'var(--color-text-secondary)' }}>
             Un bulletin météo de ton cerveau. La fragmentation est normale, la résilience est la clé.
           </p>
         </div>
@@ -78,7 +78,7 @@ export default function RealitySplitBar({ chartData = [] }) {
             <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: ratio > 75 ? 'var(--color-success)' : 'var(--color-primary)' }}>
               {ratio}%
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>Focus Stability Index</div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', textTransform: 'uppercase' }}>Focus Stability Index</div>
           </div>
         )}
       </div>
@@ -91,7 +91,7 @@ export default function RealitySplitBar({ chartData = [] }) {
             <span style={{ fontWeight: 'bold' }}>{formatHours(subjectiveMinutes)}</span>
           </div>
           <div style={{ height: '12px', background: 'var(--color-surface-hover)', borderRadius: '6px', overflow: 'hidden' }}>
-            <div style={{ height: '100%', width: '100%', background: 'var(--color-text-muted)', opacity: 0.3 }} />
+            <div style={{ height: '100%', width: '100%', background: 'var(--color-text-secondary)', opacity: 0.3 }} />
           </div>
         </div>
 

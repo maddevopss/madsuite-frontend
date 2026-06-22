@@ -5,7 +5,7 @@
   z-index: 9999;
   padding: 12px 16px;
   border-radius: 12px;
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
   color: var(--color-text-primary);
   border: 1px solid var(--color-border);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);

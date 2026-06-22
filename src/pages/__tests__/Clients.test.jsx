@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import Clients from "../Clients";
 import * as api from "../../api/api";
 
@@ -32,12 +33,20 @@ describe("Clients Page", () => {
   });
 
   test("renders clients grid", async () => {
-    const { container } = render(<Clients />);
+    const { container } = render(
+      <MemoryRouter>
+        <Clients />
+      </MemoryRouter>
+    );
     expect(container).toBeInTheDocument();
   });
 
   test("displays clients list", async () => {
-    render(<Clients />);
+    render(
+      <MemoryRouter>
+        <Clients />
+      </MemoryRouter>
+    );
 
     await waitFor(() => {
       expect(screen.getByText("Client 1")).toBeInTheDocument();
@@ -45,7 +54,11 @@ describe("Clients Page", () => {
   });
 
   test("shows add client button", () => {
-    render(<Clients />);
+    render(
+      <MemoryRouter>
+        <Clients />
+      </MemoryRouter>
+    );
     const buttons = screen.getAllByRole("button");
     expect(buttons.length).toBeGreaterThan(0);
   });

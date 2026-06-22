@@ -1,65 +1,35 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { getProjets } from "../../api/projets.api";
 import { createExpense } from "../../api/expenses.api";
 import { useToast } from "../../ToastContext";
+import { useGpsTracker } from "./useGpsTracker";
 import "./calculKm.css";
 import { AiOutlineLeft, AiOutlineCar } from "../../assets/Icon/idx_icon";
-
-function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-  const R = 6371; // Rayon de la terre en km
-  const dLat = (lat2 - lat1) * (Math.PI / 180);
-  const dLon = (lon2 - lon1) * (Math.PI / 180);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(lat1 * (Math.PI / 180)) *
-      Math.cos(lat2 * (Math.PI / 180)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  const d = R * c;
-  return d;
-}
-
-const AUTO_STOP_MINUTES = 10;
-const MIN_DISTANCE_KM = 0.05; // 50 mètres pour éviter les sauts GPS
 
 export default function CalculKm() {
   const { showToast } = useToast();
   const [projets, setProjets] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // States du Tracker
-  const [isTracking, setIsTracking] = useState(false);
-  const [distance, setDistance] = useState(0);
-  const [elapsedTime, setElapsedTime] = useState("00:00:00");
+  const handleAutoStop = useCallback(() => {
+    stopTrackingAndSave(true);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const [formData, setFormData] = useState({
-    projet_id: "",
-    rate_per_unit: 0.68,
-    description: "",
-    expense_date: new Date().toISOString().split("T")[0],
-  });
-
-  const watchIdRef = useRef(null);
-  const lastPosRef = useRef(null);
-  const lastMovedTimeRef = useRef(Date.now());
-  const distanceRef = useRef(0);
-  const startTimeRef = useRef(null);
+  const {
+    isTracking,
+    distance,
+    elapsedTime,
+    formData,
+    updateFormData,
+    startTracking,
+    stopTracking,
+    setDistance,
+    setFormData
+  } = useGpsTracker(handleAutoStop);
 
   useEffect(() => {
     fetchProjects();
-    loadStateFromStorage();
-
-    // Boucle de vérification d'inactivité (toutes les minutes)
-    const intervalId = setInterval(() => {
-      checkAutoStop();
-    }, 60000);
-
-    return () => {
-      clearInterval(intervalId);
-      if (watchIdRef.current) navigator.geolocation.clearWatch(watchIdRef.current);
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -73,142 +43,13 @@ export default function CalculKm() {
     }
   };
 
-  const loadStateFromStorage = () => {
-    const savedState = localStorage.getItem("calculKmState");
-    if (savedState) {
-      const parsed = JSON.parse(savedState);
-      if (parsed.isTracking) {
-        setIsTracking(true);
-        distanceRef.current = parsed.distance || 0;
-        setDistance(parsed.distance || 0);
-        lastPosRef.current = parsed.lastPos || null;
-        lastMovedTimeRef.current = parsed.lastMovedTime || Date.now();
-        startTimeRef.current = parsed.startTime || Date.now();
-        setFormData(parsed.formData || formData);
-        
-        // Reprendre le tracking
-        startGpsWatch();
-
-        // Vérifier si ça fait plus de 10 min qu'on n'a pas bougé
-        checkAutoStop();
-      }
-    }
-  };
-
-  const saveStateToStorage = () => {
-    localStorage.setItem(
-      "calculKmState",
-      JSON.stringify({
-        isTracking: true,
-        distance: distanceRef.current,
-        lastPos: lastPosRef.current,
-        lastMovedTime: lastMovedTimeRef.current,
-        startTime: startTimeRef.current,
-        formData: formData,
-      })
-    );
-  };
-
-  const clearStateStorage = () => {
-    localStorage.removeItem("calculKmState");
-  };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => {
-      const newState = { ...prev, [name]: value };
-      if (isTracking) {
-        localStorage.setItem("calculKmState", JSON.stringify({
-          ...JSON.parse(localStorage.getItem("calculKmState") || "{}"),
-          formData: newState
-        }));
-      }
-      return newState;
-    });
-  };
-
-  const startTracking = () => {
-    if (!formData.projet_id) {
-      showToast("Veuillez sélectionner un projet avant de démarrer.", "warning");
-      return;
-    }
-
-    if (!navigator.geolocation) {
-      showToast("La géolocalisation n'est pas supportée par votre navigateur.", "error");
-      return;
-    }
-
-    // Initialize state
-    distanceRef.current = 0;
-    setDistance(0);
-    lastPosRef.current = null;
-    lastMovedTimeRef.current = Date.now();
-    startTimeRef.current = Date.now();
-    setIsTracking(true);
-
-    saveStateToStorage();
-    startGpsWatch();
-    showToast("Suivi GPS démarré.", "success");
-  };
-
-  const startGpsWatch = () => {
-    if (watchIdRef.current) navigator.geolocation.clearWatch(watchIdRef.current);
-
-    watchIdRef.current = navigator.geolocation.watchPosition(
-      (position) => {
-        const currentLat = position.coords.latitude;
-        const currentLng = position.coords.longitude;
-
-        if (lastPosRef.current) {
-          const dist = getDistanceFromLatLonInKm(
-            lastPosRef.current.lat,
-            lastPosRef.current.lng,
-            currentLat,
-            currentLng
-          );
-
-          if (dist >= MIN_DISTANCE_KM) {
-            distanceRef.current += dist;
-            setDistance(distanceRef.current);
-            lastPosRef.current = { lat: currentLat, lng: currentLng };
-            lastMovedTimeRef.current = Date.now();
-            saveStateToStorage();
-          }
-        } else {
-          // Premier point
-          lastPosRef.current = { lat: currentLat, lng: currentLng };
-          lastMovedTimeRef.current = Date.now();
-          saveStateToStorage();
-        }
-      },
-      (error) => {
-        console.warn("Erreur GPS :", error.message);
-      },
-      {
-        enableHighAccuracy: true,
-        maximumAge: 10000,
-        timeout: 5000,
-      }
-    );
-  };
-
-  const checkAutoStop = () => {
-    if (!isTracking) return;
-    const now = Date.now();
-    const minutesSinceLastMove = (now - lastMovedTimeRef.current) / 1000 / 60;
-    
-    if (minutesSinceLastMove >= AUTO_STOP_MINUTES) {
-      console.log(`Auto-stop déclenché après ${AUTO_STOP_MINUTES} minutes sans mouvement.`);
-      stopTrackingAndSave(true);
-    }
+    updateFormData(name, value);
   };
 
   const stopTrackingAndSave = async (isAuto = false) => {
-    setIsTracking(false);
-    if (watchIdRef.current) navigator.geolocation.clearWatch(watchIdRef.current);
-    
-    const finalDistance = distanceRef.current;
-    clearStateStorage();
+    const finalDistance = stopTracking();
 
     if (finalDistance < 0.1) {
       if (!isAuto) showToast("Trajet trop court (< 100m). Non enregistré.", "warning");
@@ -238,24 +79,6 @@ export default function CalculKm() {
       setLoading(false);
     }
   };
-
-  // Timer rendering
-  useEffect(() => {
-    let interval;
-    if (isTracking && startTimeRef.current) {
-      interval = setInterval(() => {
-        const now = new Date().getTime();
-        const diff = now - startTimeRef.current;
-        const h = Math.floor(diff / 3600000).toString().padStart(2, "0");
-        const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, "0");
-        const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, "0");
-        setElapsedTime(`${h}:${m}:${s}`);
-      }, 1000);
-    } else {
-      setElapsedTime("00:00:00");
-    }
-    return () => clearInterval(interval);
-  }, [isTracking]);
 
   const calculateTotalPreview = () => {
     return (distance * parseFloat(formData.rate_per_unit)).toFixed(2);

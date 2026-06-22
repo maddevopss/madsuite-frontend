@@ -10,7 +10,7 @@
   /* TEXT */
   --color-text-primary: #E6EAF2;
   --color-text-secondary: #A7B0C0;
-  --color-text-muted: #6B7280;
+  --color-text-secondary: #6B7280;
 
   /* ACCENT */
   --color-primary: #4C7DFF;
@@ -47,14 +47,14 @@
 
   /* LEGACY ALIASES (to prevent app from breaking) */
   --color-primary-600: var(--color-primary);
-  --color-surface-strong: var(--color-elevated);
+  --color-surface: var(--color-elevated);
   --color-surface-muted: var(--color-surface);
   --color-on-brand: var(--color-text-primary);
   --color-on-surface: var(--color-text-primary);
   --color-border-subtle: var(--color-border);
-  --color-border-strong: var(--color-border);
+  --color-border: var(--color-border);
   --color-info: var(--color-primary);
-  --color-text-tertiary: var(--color-text-muted);
+  --color-text-tertiary: var(--color-text-secondary);
   --color-background-primary: var(--color-background);
   --color-background-secondary: var(--color-surface);
   --color-background-info: var(--color-success);

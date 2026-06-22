@@ -11,8 +11,8 @@
 }
 
 .badge--default {
-  background: var(--color-surface-strong);
-  color: var(--color-text-muted);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
 }
 
 .badge--success {

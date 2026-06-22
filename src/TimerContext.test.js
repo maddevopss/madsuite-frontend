@@ -5,6 +5,7 @@ import { getClientsDashboard } from "./api/clients.api";
 import { getProjects } from "./api/projets.api";
 import { setAccessToken, clearAccessToken } from "./api/tokenStore";
 
+jest.mock("canvas-confetti", () => jest.fn());
 jest.mock("./api/api");
 jest.mock("./api/clients.api");
 jest.mock("./api/projets.api");
@@ -50,9 +51,10 @@ jest.mock("./RefreshContext", () => ({
   }),
 }));
 
+const mockShowToast = jest.fn();
 jest.mock("./ToastContext", () => ({
   useToast: () => ({
-    showToast: jest.fn(),
+    showToast: mockShowToast,
   }),
 }));
 

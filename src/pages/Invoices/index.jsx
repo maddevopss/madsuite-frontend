@@ -11,13 +11,14 @@ import CreateInvoiceModal from "./CreateInvoiceModal";
 import EditInvoiceModal from "./EditInvoiceModal";
 import InvoiceCard from "./InvoiceCard";
 import ViewInvoiceModal from "./ViewInvoiceModal";
+import MakeRecurringModal from "./MakeRecurringModal";
 import { captureElement } from "@/utils/lazyHtml2canvas";
 
 import api from "../../api/api";
 import "./invoices.css";
 
 export default function Invoices() {
-  const { invoices, loading, loadInvoices, fetchInvoice, addInvoice, saveInvoice, removeInvoice } = useInvoices();
+  const { invoices, loading, loadInvoices, fetchInvoice, addInvoice, saveInvoice, removeInvoice, fetchPortalLink, checkoutInvoice } = useInvoices();
   const { showToast } = useToast();
   const location = useLocation();
   const handledLocationState = useRef(false);
@@ -25,6 +26,7 @@ export default function Invoices() {
   const createModal = useModal();
   const viewModal = useModal();
   const editModal = useModal();
+  const makeRecurringModal = useModal();
 
   const [statusFilter, setStatusFilter] = useState("");
   const [clients, setClients] = useState([]);
@@ -44,6 +46,18 @@ export default function Invoices() {
       .then((c) => setClients(c || []))
       .catch(() => {});
   }, [reloadInvoices]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("payment") === "success") {
+      showToast("Paiement réussi ! La facture sera mise à jour d'ici quelques instants.", "success");
+      // Remove query param without reload
+      window.history.replaceState(null, "", location.pathname);
+    } else if (params.get("payment") === "cancelled") {
+      showToast("Le paiement a été annulé.", "error");
+      window.history.replaceState(null, "", location.pathname);
+    }
+  }, [location, showToast]);
 
   const openCreateModal = useCallback(() => {
     setInitialCreateClientId(null);
@@ -134,6 +148,50 @@ export default function Invoices() {
     [showToast],
   );
 
+  const handlePreviewPDF = useCallback(
+    async (id) => {
+      try {
+        const buffer = await api.get(`/invoices/${id}/pdf`, { responseType: "arraybuffer" });
+        const blob = new Blob([buffer.data], { type: "application/pdf" });
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      } catch (err) {
+        showToast(getApiErrorMessage(err, "Impossible de prévisualiser le PDF."), "error");
+      }
+    },
+    [showToast]
+  );
+
+  const handleCopyPortalLink = useCallback(
+    async (id) => {
+      const data = await fetchPortalLink(id);
+      if (data?.portalUrl) {
+        try {
+          await navigator.clipboard.writeText(data.portalUrl);
+          showToast("Lien client copié dans le presse-papiers !", "success");
+        } catch (err) {
+          showToast("Impossible de copier le lien. Vérifiez les permissions de votre navigateur.", "error");
+        }
+      }
+    },
+    [fetchPortalLink, showToast]
+  );
+
+  const handlePay = useCallback(
+    async (id) => {
+      const data = await checkoutInvoice(id);
+      if (data?.url) {
+        window.location.href = data.url;
+      }
+    },
+    [checkoutInvoice]
+  );
+
+  const handleMakeRecurring = useCallback((inv) => {
+    viewModal.closeModal();
+    makeRecurringModal.openModal(inv);
+  }, [viewModal, makeRecurringModal]);
+
   return (
     <div className="invoices-page">
       <div className="invoices-header">
@@ -163,7 +221,7 @@ export default function Invoices() {
           message={
             statusFilter
               ? "Essayez un autre statut ou affichez toutes les factures."
-              : "Créez votre première facture à partir du temps facturable."
+              : "Aucune facture encore — créez un devis ou un client."
           }
           action={
             statusFilter ? (
@@ -206,6 +264,17 @@ export default function Invoices() {
         invoice={viewInvoice}
         onClose={viewModal.closeModal}
         onDownloadPDF={handleDownloadPDF}
+        onPreviewPDF={handlePreviewPDF}
+        onCopyPortalLink={handleCopyPortalLink}
+        onPay={handlePay}
+        onMakeRecurring={handleMakeRecurring}
+      />
+
+      <MakeRecurringModal 
+        show={makeRecurringModal.isOpen}
+        invoice={makeRecurringModal.selectedItem}
+        onClose={makeRecurringModal.closeModal}
+        onSuccess={() => reloadInvoices()}
       />
 
       <EditInvoiceModal

@@ -61,6 +61,7 @@ jest.mock("../pages/Timesheet/TimesheetTable", () => (props) => (
 ));
 jest.mock("../pages/Timesheet/EntryForm", () => () => <div>entry-form</div>);
 jest.mock("../pages/Timesheet/EditEntryForm", () => jest.fn(() => <div data-testid="edit-form">edit-form</div>));
+jest.mock("../components/ui/AdaptivePanel", () => ({ children }) => <div>{children}</div>);
 
 describe("Timesheet page", () => {
   beforeEach(() => {

@@ -27,6 +27,8 @@ jest.mock("../../hooks/useModal", () => ({
   }),
 }));
 
+jest.mock("../../components/ui/AdaptivePanel", () => ({ children }) => <div>{children}</div>);
+
 describe("Projets Page", () => {
   beforeEach(() => {
     jest.clearAllMocks();

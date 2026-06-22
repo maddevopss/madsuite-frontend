@@ -12,13 +12,24 @@ jest.mock("../routes/ProtectedRoute", () => {
     return <div data-testid="protected-route">{children}</div>;
   };
 });
+
+jest.mock("../components/ui/AdaptivePanel", () => ({ children }) => <div>{children}</div>);
+
+jest.mock("../components/activity-intelligence/CognitiveMetricsPanel", () => () => <div />);
+
 jest.mock(
   "react-router-dom",
   () => ({
     Outlet: () => <div data-testid="outlet">Outlet</div>,
+    useNavigate: () => jest.fn(),
+    useLocation: () => ({ pathname: "/" }),
   }),
   { virtual: true },
 );
+
+jest.mock("../hooks/useFunnelStatus", () => ({
+  useFunnelStatus: () => ({ hasClients: true, hasEstimates: true, hasInvoices: true, loading: false })
+}));
 
 jest.mock("../components/Header", () => () => <header>Header mock</header>);
 jest.mock("../components/Sidebar", () => () => <aside>Sidebar mock</aside>);

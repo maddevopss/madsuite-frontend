@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../styles/clients.css";
 import { ConfirmModal, Modal } from "../../components/ui";
 
@@ -12,16 +13,30 @@ import ClientsHeader from "./ClientsHeader";
 import { useAuth } from "../../api/authContext";
 import { useClients } from "../../hooks/useClients";
 import { useModal } from "../../hooks/useModal";
+import { useCognitiveBudget } from "../../hooks/useCognitiveBudget";
 
 export default function Clients() {
   const { user } = useAuth();
   const isAdmin = user?.role === "admin";
+  const navigate = useNavigate();
 
   const addModal = useModal();
   const viewModal = useModal();
   const editModal = useModal();
 
   const { clients, createClient, updateClient, deleteClient, confirmProps, refreshClients } = useClients();
+
+  useCognitiveBudget({
+    pageName: 'Clients',
+    budget: { maxScore: 25 },
+    metrics: {
+      visibleActions: 2, 
+      visibleColors: 1,
+      animationsActive: 0,
+      competingCTAs: 0, 
+      visiblePanels: 1,
+    }
+  });
 
   const [form, setForm] = useState({
     nom: "",
@@ -80,10 +95,16 @@ export default function Clients() {
 
   const handleCreate = useCallback(
     async (clientData) => {
+      const isFirstClient = clients && clients.length === 0;
       const success = await createClient(clientData);
-      if (success) closeAddModal();
+      if (success) {
+        closeAddModal();
+        if (isFirstClient) {
+          navigate("/estimates", { replace: true });
+        }
+      }
     },
-    [closeAddModal, createClient],
+    [closeAddModal, createClient, clients, navigate],
   );
 
   const handleUpdate = useCallback(
@@ -107,6 +128,7 @@ export default function Clients() {
         onView={handleView}
         onEdit={handleEdit}
         onDelete={(id) => deleteClient(id)}
+        onAdd={openAddModal}
       />
       <Modal show={viewModal.isOpen} title="Détails du client" onClose={viewModal.closeModal}>
         <ViewClientDetails client={viewModal.selectedItem} onClose={viewModal.closeModal} />

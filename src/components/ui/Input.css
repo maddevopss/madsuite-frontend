@@ -13,7 +13,7 @@
 .input-label {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   margin-left: 2px;
 }
 
@@ -47,11 +47,11 @@
 
 /* États du champ */
 .input-field::placeholder {
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
 }
 
 .input-field:hover {
-  border-color: var(--color-border-strong);
+  border-color: var(--color-border);
 }
 
 .input-field:focus {
@@ -98,7 +98,7 @@
 /* Style pour les champs désactivés */
 .input-field:disabled {
   background-color: var(--color-surface-muted);
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   cursor: not-allowed;
   border-color: var(--color-border-subtle);
 }

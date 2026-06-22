@@ -1,178 +1,98 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "../../styles/dashboard.css";
+import { Loader, Card } from "../../components/ui";
 
-import { Loader } from "../../components/ui";
-import { ResponsiveLineChart } from "../../components/charts/ResponsiveLineChart";
-
-import { useDashboard } from "../../hooks/useDashboard";
-import { useMonthlyData } from "../../hooks/useReportData";
-
-import DashboardActiveTimer from "./DashboardActiveTimer";
-import DashboardMetrics from "./DashboardMetrics";
-import DashboardClientTime from "./DashboardClientTime";
-import DashboardCharts from "./DashboardCharts";
-import DashboardActivityIntelligence from "./DashboardActivityIntelligence";
-import ActivitySummary from "../../components/activity/ActivitySummary";
-import PurgeNotification from "../../components/PurgeNotification";
-import BillingDashboardCockpit from "./BillingDashboardCockpit";
-import RescueModal from "./RescueModal";
-import BrainDumpInput from "./BrainDumpInput";
-import RecoveryModal from "./RecoveryModal";
-import DopamineLog from "./DopamineLog";
-import RealitySplitBar from "./RealitySplitBar";
+import { useBillingDashboard } from "../../hooks/useBillingDashboard";
+import { useEstimates } from "../../hooks/useEstimates";
+import { formatMoney } from "../../utils/formatters";
+import SampleDataGenerator from "../../components/onboarding/SampleDataGenerator";
 
 export default function Dashboard() {
+  const {
+    loading: billingLoading,
+    total_paid_this_month,
+    unbilled_hours,
+    invoiceStatus,
+    refresh: refreshBilling
+  } = useBillingDashboard();
 
-  // Main dashboard data (local state + timers)
-  const { stats, loading, parClient, maxHeures, chartData } = useDashboard();
-
-  // Monthly data with caching (from React Query)
-  const { data, isLoading: monthlyLoading, error: monthlyError } = useMonthlyData(new Date().getFullYear());
-
-  // Zen Mode
-  const [zenMode, setZenMode] = useState(false);
-  // Rescue & Recovery
-  const [showRescue, setShowRescue] = useState(false);
-  const [showRecovery, setShowRecovery] = useState(false);
+  const {
+    estimates,
+    loading: estimatesLoading,
+    loadEstimates
+  } = useEstimates();
 
   useEffect(() => {
-    const saved = localStorage.getItem("zenMode");
-    if (saved === "true") setZenMode(true);
-  }, []);
-  const toggleZenMode = () => {
-    const newZen = !zenMode;
-    setZenMode(newZen);
-    localStorage.setItem("zenMode", String(newZen));
+    loadEstimates({ status: 'draft' });
+  }, [loadEstimates]);
+
+  const handleGenerate = () => {
+    refreshBilling();
+    loadEstimates({ status: 'draft' });
+    window.location.reload(); // Quickest way to ensure all parts catch the new data.
   };
 
-  // Show loading state if either hook is loading
-  const isLoading = loading || monthlyLoading;
-  const hasError = monthlyError;
+  const isLoading = billingLoading || estimatesLoading;
 
   if (isLoading) {
     return <Loader label="Chargement du tableau de bord..." variant="dashboard" />;
   }
 
-  if (hasError) {
-    return (
-      <div className="dashboard-page">
-        <h1>Bienvenue sur le tableau de bord</h1>
-        <div className="error-message">Erreur lors du chargement des données: {monthlyError.message}</div>
-      </div>
-    );
-  }
+  const unpaidInvoicesCount = Number(invoiceStatus?.sent?.count || 0) + Number(invoiceStatus?.overdue?.count || 0);
+  const pendingEstimatesCount = estimates.filter(e => e.status === 'draft' || e.status === 'sent').length;
 
   return (
-    <div className="dashboard-page">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>Bienvenue sur le tableau de bord</h1>
-        <div style={{ display: 'flex', gap: '12px' }}>
-          <button 
-            onClick={() => setShowRecovery(true)}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '20px',
-              border: '1px solid var(--color-primary)',
-              background: 'transparent',
-              color: 'var(--color-primary)',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              fontWeight: 'bold',
-            }}
-          >
-            🔄 Je reviens
-          </button>
-          <button 
-            onClick={() => setShowRescue(true)}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '20px',
-              border: 'none',
-              background: 'var(--color-danger)',
-              color: 'white',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              fontWeight: 'bold',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-            }}
-          >
-            🛟 Je suis éparpillé
-          </button>
-          <button 
-            onClick={toggleZenMode}
-          style={{
-            padding: '8px 16px',
-            borderRadius: '20px',
-            border: '1px solid var(--color-border)',
-            background: zenMode ? 'var(--color-primary)' : 'var(--color-surface)',
-            color: zenMode ? 'white' : 'var(--color-text-primary)',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            fontWeight: 'bold'
-          }}
-        >
-          {zenMode ? '🧘‍♂️ Quitter le Mode Zen' : '🧘‍♂️ Mode Zen'}
-        </button>
+    <div className="dashboard-page" style={{ padding: '30px', maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+        <div>
+          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: 'bold' }}>Tableau de bord</h1>
+          <p style={{ color: '#64748b', marginTop: '5px' }}>L'essentiel de vos revenus en un coup d'œil.</p>
         </div>
       </div>
 
-      <RescueModal show={showRescue} onClose={() => setShowRescue(false)} />
-      <RecoveryModal show={showRecovery} onClose={() => setShowRecovery(false)} />
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', 
+        gap: '20px',
+        marginBottom: '40px' 
+      }}>
+        {/* Metric 1: Revenue this month */}
+        <Card style={{ padding: '24px', background: '#fff', border: '1px solid #e2e8f0' }}>
+          <h3 style={{ margin: 0, fontSize: '14px', color: '#64748b', fontWeight: '600', textTransform: 'uppercase' }}>Revenus (Ce mois)</h3>
+          <p style={{ fontSize: '32px', fontWeight: 'bold', color: '#10b981', margin: '10px 0' }}>{formatMoney(total_paid_this_month)}</p>
+          <p style={{ margin: 0, fontSize: '13px', color: '#64748b' }}>Montant total payé</p>
+        </Card>
 
-      <div className="view active" id="view-dashboard">
-        {loading ? (
-          <Loader label="Chargement du tableau de bord..." variant="dashboard" />
-        ) : (
-          <>
-            <PurgeNotification />
-            <div className="dashboard-content">
-              {!zenMode && <RealitySplitBar chartData={chartData} />}
-            {!zenMode && <DashboardMetrics stats={stats} />}
-            </div>
+        {/* Metric 2: Unpaid invoices */}
+        <Card style={{ padding: '24px', background: '#fff', border: '1px solid #e2e8f0' }}>
+          <h3 style={{ margin: 0, fontSize: '14px', color: '#64748b', fontWeight: '600', textTransform: 'uppercase' }}>Factures en attente</h3>
+          <p style={{ fontSize: '32px', fontWeight: 'bold', color: '#f59e0b', margin: '10px 0' }}>{unpaidInvoicesCount}</p>
+          <div style={{ marginTop: '10px' }}>
+            <Link to="/invoices" style={{ fontSize: '13px', color: '#3b82f6', textDecoration: 'none', fontWeight: '500' }}>Voir les factures &rarr;</Link>
+          </div>
+        </Card>
 
-            <div className="dashboard-sidebar">
-              <DopamineLog />
-              <BrainDumpInput />
-              <DashboardActivityIntelligence />
-              <ActivitySummary />
-            </div>
+        {/* Metric 3: Pending estimates */}
+        <Card style={{ padding: '24px', background: '#fff', border: '1px solid #e2e8f0' }}>
+          <h3 style={{ margin: 0, fontSize: '14px', color: '#64748b', fontWeight: '600', textTransform: 'uppercase' }}>Devis en attente</h3>
+          <p style={{ fontSize: '32px', fontWeight: 'bold', color: '#3b82f6', margin: '10px 0' }}>{pendingEstimatesCount}</p>
+          <div style={{ marginTop: '10px' }}>
+            <Link to="/estimates" style={{ fontSize: '13px', color: '#3b82f6', textDecoration: 'none', fontWeight: '500' }}>Voir les devis &rarr;</Link>
+          </div>
+        </Card>
 
-            <DashboardActiveTimer />
-
-            {!zenMode && (
-              <>
-                <BillingDashboardCockpit />
-
-                <div className="two-col">
-                  <DashboardClientTime parClient={parClient} maxHeures={maxHeures} />
-                  <DashboardCharts chartData={chartData} />
-                </div>
-
-                <div className="monthly-chart-section">
-                  <h2>Données mensuelles</h2>
-                  {data?.monthly && data.monthly.length > 0 ? (
-                    <>
-                      <ResponsiveLineChart data={data.monthly} />
-                      <p className="text-sm text-gray-500">
-                        📊 Données {data._cached ? "en cache" : "fraîches"}
-                        {data._cacheAge && ` (${data._cacheAge})`}
-                      </p>
-                    </>
-                  ) : (
-                    <p className="text-gray-400">Aucune donnée disponible pour ce mois</p>
-                  )}
-                </div>
-              </>
-            )}
-          </>
-        )}
+        {/* Metric 4: Hours billable */}
+        <Card style={{ padding: '24px', background: '#fff', border: '1px solid #e2e8f0' }}>
+          <h3 style={{ margin: 0, fontSize: '14px', color: '#64748b', fontWeight: '600', textTransform: 'uppercase' }}>Heures Facturables</h3>
+          <p style={{ fontSize: '32px', fontWeight: 'bold', color: '#6366f1', margin: '10px 0' }}>{unbilled_hours.toFixed(1)}h</p>
+          <div style={{ marginTop: '10px' }}>
+            <Link to="/invoices" state={{ openCreateInvoice: true }} style={{ fontSize: '13px', color: '#3b82f6', textDecoration: 'none', fontWeight: '500' }}>Facturer le temps &rarr;</Link>
+          </div>
+        </Card>
       </div>
+
+      <SampleDataGenerator onGenerate={handleGenerate} />
     </div>
   );
 }

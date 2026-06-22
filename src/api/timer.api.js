@@ -41,3 +41,8 @@ export const getLatestActivity = async () => {
   const res = await api.get("/activity/latest");
   return res.data;
 };
+
+export const syncTimerState = async (params) => {
+  const res = await api.get("/timer/sync", { params });
+  return unwrapApiResponse(res);
+};

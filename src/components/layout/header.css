@@ -7,10 +7,10 @@
 }
 
 .header {
-  min-height: 86px;
-  padding: 0 24px;
-  border-bottom: 1px solid var(--color-border-strong);
-  background: var(--color-brand-gradient);
+  min-height: 72px;
+  padding: 0 var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-background);
 }
 
 .App-logo {
@@ -42,7 +42,7 @@
 
 .page-header p {
   margin: 6px 0 0;
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
 }
 
 .page-header-icon {
@@ -55,7 +55,7 @@
   gap: 10px;
   padding: 8px 14px;
   border-radius: 12px;
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
 }
 
@@ -77,7 +77,7 @@
 
 .page-header-timer-project {
   font-size: 0.72rem;
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
 }
 
 .timer-project-dot {
@@ -90,12 +90,11 @@
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 12px;
-  border: 1px solid var(--color-border-strong);
+  gap: var(--spacing-md);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: 10px 14px;
-  background: var(--color-surface-strong);
-  box-shadow: var(--shadow-sm);
+  padding: 8px var(--spacing-md);
+  background: var(--color-surface);
   position: relative;
   overflow: hidden;
 }
@@ -141,13 +140,15 @@
 }
 
 .timer-input::placeholder {
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
 }
 
 .timer-bar select {
-  border: 1px solid var(--color-border-strong);
+  border: 1px solid var(--color-border);
+  background: var(--color-background);
+  border-radius: var(--radius-sm);
   color: var(--color-text-primary);
-  padding: 9px 12px;
+  padding: 8px 12px;
   outline: none;
   min-width: 200px;
 }
@@ -160,7 +161,8 @@
 
 .timer-bar select:focus,
 .timer-input:focus {
-  box-shadow: 0 0 0 2px var(--color-border);
+  box-shadow: 0 0 0 2px var(--color-primary-glow);
+  border-color: var(--color-primary);
 }
 
 .timer-clock {
@@ -219,7 +221,7 @@
 
 .timer-live-project {
   font-size: 0.72rem;
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   white-space: nowrap;
 }
 
@@ -229,24 +231,24 @@
   padding: 4px 10px;
   border-radius: 999px;
   background: var(--color-surface-muted);
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   font-size: 0.8rem;
   font-weight: 600;
 }
 
 .timer-warning {
-  margin-top: 8px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: var(--color-warning-soft);
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  background: var(--color-elevated);
   border: 1px solid var(--color-warning);
-  color: var(--color-warning);
+  color: var(--color-text-primary);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  font-size: 0.9rem;
-  font-weight: 600;
+  gap: var(--spacing-md);
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .timer-warning__text {

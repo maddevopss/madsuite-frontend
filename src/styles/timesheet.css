@@ -29,9 +29,9 @@
 .ts-filters select {
   font-size: 1rem;
   padding: 6px 10px;
-  border: 0.5px solid var(--color-border-strong);
+  border: 0.5px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
   color: var(--color-text-primary);
 }
 
@@ -53,7 +53,7 @@
   color: var(--color-text-primary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  border-bottom: 0.5px solid var(--color-border-strong);
+  border-bottom: 0.5px solid var(--color-border);
 }
 
 /* Ligne d'entrée */
@@ -70,12 +70,12 @@
   gap: 12px;
   align-items: center;
   padding: 10px 12px;
-  border-bottom: 0.5px solid var(--color-border-strong);
+  border-bottom: 0.5px solid var(--color-border);
   transition: background 0.15s;
 }
 
 .ts-entry:hover {
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
 }
 
 .ts-entry:last-child {
@@ -149,7 +149,7 @@
 }
 
 .ts-badge--pending {
-  border-color: var(--color-border-strong);
+  border-color: var(--color-border);
 }
 
 /* Boutons actions */
@@ -174,7 +174,7 @@
 
 .ts-action-btn:hover {
   opacity: 1;
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
 }
 
 .ts-action-btn--delete:hover {
@@ -190,7 +190,7 @@
 
   font-weight: 500;
   color: var(--color-text-primary);
-  border-top: 0.5px solid var(--color-border-strong);
+  border-top: 0.5px solid var(--color-border);
   margin-top: 4px;
 }
 
@@ -213,8 +213,8 @@
 }
 
 .ts-modal {
-  background: var(--color-surface-strong);
-  border: 0.5px solid var(--color-border-strong);
+  background: var(--color-surface);
+  border: 0.5px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   width: 420px;
@@ -240,9 +240,9 @@
   width: 100%;
 
   padding: 7px 10px;
-  border: 0.5px solid var(--color-border-strong);
+  border: 0.5px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
   color: var(--color-text-primary);
 }
 
@@ -258,7 +258,7 @@
   height: 32px;
 
   border-radius: 999px;
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
 
   overflow: hidden;
 }
@@ -286,7 +286,7 @@
 
   border-radius: 14px;
 
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
 }
 
 .timesheet-stats span {
@@ -307,7 +307,7 @@
   width: 100%;
 
   border-radius: 999px;
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
 
   overflow: hidden;
 }
@@ -340,8 +340,8 @@
 
   border-radius: 12px;
 
-  background: var(--color-surface-strong);
-  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
 }
 
 .timesheet-day-header h3 {
@@ -368,5 +368,5 @@
 
   border-radius: 14px;
 
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
 }

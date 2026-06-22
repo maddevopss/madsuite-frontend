@@ -23,16 +23,19 @@ function getDefaultDateRange() {
 
 function ActivitySummary() {
   const defaultRange = getDefaultDateRange();
-  const [rows, setRows] = useState([]);
-  const [categoryRows, setCategoryRows] = useState([]);
   const [dateDebut, setDateDebut] = useState(defaultRange.dateDebut);
   const [dateFin, setDateFin] = useState(defaultRange.dateFin);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [productivityScore, setProductivityScore] = useState(0);
-  const [topDistractions, setTopDistractions] = useState([]);
-  const [topProductive, setTopProductive] = useState([]);
   const [categorizingAi, setCategorizingAi] = useState(false);
+
+  const [summaryData, setSummaryData] = useState({
+    rows: [],
+    categoryRows: [],
+    topDistractions: [],
+    topProductive: [],
+    productivityScore: 0,
+  });
 
   const handleCategorizeAi = async () => {
     setCategorizingAi(true);
@@ -61,62 +64,16 @@ function ActivitySummary() {
         },
       });
 
-      const data = Array.isArray(res?.data) ? res.data : [];
-
-      const formatted = data.map((item) => ({
-        name: item.app_name || "Inconnu",
-        category: item.category || "neutre",
-        heures: Number(item.total_seconds || 0) / 3600,
-      }));
-
-      const sortedFormatted = [...formatted].sort((a, b) => b.heures - a.heures);
-      let displayRows = sortedFormatted;
+      const data = res.data || {};
       
-      if (sortedFormatted.length > 15) {
-        const top15 = sortedFormatted.slice(0, 15);
-        const others = sortedFormatted.slice(15);
-        const othersHeures = others.reduce((acc, curr) => acc + curr.heures, 0);
-        displayRows = [...top15, { name: "Autres", category: "neutre", heures: othersHeures }];
-      }
+      setSummaryData({
+        rows: data.rows || [],
+        categoryRows: data.categoryRows || [],
+        topDistractions: data.topDistractions || [],
+        topProductive: data.topProductive || [],
+        productivityScore: data.productivityScore || 0,
+      });
 
-      const totalsByCategory = formatted.reduce(
-        (acc, item) => {
-          acc[item.category] = (acc[item.category] || 0) + item.heures;
-          return acc;
-        },
-        {
-          productif: 0,
-          neutre: 0,
-          distraction: 0,
-        },
-      );
-
-      const totalHours = totalsByCategory.productif + totalsByCategory.neutre + totalsByCategory.distraction;
-
-      const score = totalHours > 0 ? (totalsByCategory.productif / totalHours) * 100 : 0;
-
-      setProductivityScore(score);
-      setRows(displayRows);
-
-      setCategoryRows([
-        { name: "Focus", heures: totalsByCategory.productif },
-        { name: "Neutre", heures: totalsByCategory.neutre },
-        { name: "Exploration", heures: totalsByCategory.distraction },
-      ]);
-
-      const distractions = formatted
-        .filter((item) => item.category === "distraction")
-        .sort((a, b) => b.heures - a.heures)
-        .slice(0, 5);
-
-      setTopDistractions(distractions);
-
-      const productiveApps = formatted
-        .filter((item) => item.category === "productif")
-        .sort((a, b) => b.heures - a.heures)
-        .slice(0, 5);
-
-      setTopProductive(productiveApps);
     } catch (err) {
       if (err.response?.status === 429) {
         console.warn("Activity summary rate limited.");
@@ -124,11 +81,13 @@ function ActivitySummary() {
       }
       console.error("Erreur chargement activity summary:", err);
       setError("Impossible de charger le résumé d'activité.");
-      setRows([]);
-      setCategoryRows([]);
-      setTopDistractions([]);
-      setTopProductive([]);
-      setProductivityScore(0);
+      setSummaryData({
+        rows: [],
+        categoryRows: [],
+        topDistractions: [],
+        topProductive: [],
+        productivityScore: 0,
+      });
     } finally {
       setLoading(false);
     }
@@ -137,6 +96,8 @@ function ActivitySummary() {
   useEffect(() => {
     loadActivitySummary();
   }, [loadActivitySummary]);
+
+  const { rows, categoryRows, topProductive, topDistractions, productivityScore } = summaryData;
 
   return (
     <div className="card activity-summary-card">

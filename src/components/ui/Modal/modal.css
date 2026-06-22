@@ -12,7 +12,7 @@
 .ui-modal {
   width: 520px;
   max-width: 92vw;
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
   color: var(--color-text-primary);
   border-radius: var(--radius-lg);
   padding: 22px;

@@ -35,7 +35,13 @@ jest.mock("../Dashboard/DashboardActiveTimer", () => () => <div>Timer Mock</div>
 jest.mock("../Dashboard/DashboardActivityIntelligence", () => () => <div>Activity Mock</div>);
 jest.mock("../Dashboard/DashboardClientTime", () => () => <div>ClientTime Mock</div>);
 jest.mock("../../components/activity/ActivitySummary", () => () => <div>ActivitySummary Mock</div>);
-jest.mock("../Dashboard/BillingDashboardCockpit", () => () => <div>Billing Mock</div>);
+jest.mock("../Dashboard/BillingDashboardCockpit", () => () => <div data-testid="billing" />);
+jest.mock("../Dashboard/RecoveryModal", () => () => <div data-testid="recovery" />);
+jest.mock("../Dashboard/RescueModal", () => () => <div data-testid="rescue" />);
+jest.mock("../Dashboard/RealitySplitBar", () => () => <div />);
+jest.mock("../Dashboard/DopamineLog", () => () => <div />);
+jest.mock("../Dashboard/BrainDumpInput", () => () => <div />);
+jest.mock("../../components/cognitive/CognitiveExperienceOrchestrator", () => () => <div />);
 
 describe("Dashboard Page", () => {
   beforeEach(() => {

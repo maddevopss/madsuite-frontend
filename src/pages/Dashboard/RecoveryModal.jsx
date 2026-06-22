@@ -38,7 +38,7 @@ export default function RecoveryModal({ show, onClose }) {
           <div style={{ fontSize: '0.8rem', color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
             💾 Contexte Mental Restauré
           </div>
-          <p style={{ margin: 0, color: "var(--color-text-muted)" }}>
+          <p style={{ margin: 0, color: "var(--color-text-secondary)" }}>
             Tu étais concentré sur : <br/>
             <strong style={{ fontSize: '1.2rem', color: 'var(--color-text-primary)' }}>{description || "Aucun objectif défini"}</strong>
           </p>

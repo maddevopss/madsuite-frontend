@@ -25,7 +25,7 @@ export default function AnchorRitualModal({ show, onClose, onConfirm }) {
     <Modal show={show} onClose={onClose} title="⚓ Anchor Ritual">
       <div style={{ padding: "1.5rem", color: "var(--color-text-primary)" }}>
         <h2 style={{ fontSize: "1.2rem", marginBottom: "0.5rem" }}>Avant de commencer...</h2>
-        <p style={{ marginBottom: "1.5rem", color: "var(--color-text-muted)" }}>
+        <p style={{ marginBottom: "1.5rem", color: "var(--color-text-secondary)" }}>
           Faisons un contrat mental pour cette session.
         </p>
 

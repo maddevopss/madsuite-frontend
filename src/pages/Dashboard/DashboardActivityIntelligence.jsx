@@ -49,7 +49,7 @@ function DashboardActivityIntelligence() {
           ✨ Créer ma feuille de temps
         </Button>
       </div>
-      <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '16px' }}>
+      <p style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', marginBottom: '16px' }}>
         Oublié de démarrer le chronomètre ? Voici ce que l'IA a détecté pendant votre session.
       </p>
 

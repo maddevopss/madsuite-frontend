@@ -1,9 +1,13 @@
 import { memo } from "react";
 import { Card, Button, EmptyState } from "../../components/ui";
 
-function ClientsGrid({ clients = [], isAdmin, onView, onEdit, onDelete }) {
+function ClientsGrid({ clients = [], isAdmin, onView, onEdit, onDelete, onAdd }) {
   if (clients.length === 0) {
-    return <EmptyState message="Aucun client trouvé." />;
+    return <EmptyState 
+      title="Aucun client" 
+      message="Créer votre premier client pour envoyer votre première facture" 
+      action={<Button variant="primary" onClick={onAdd}>[Créer client]</Button>} 
+    />;
   }
 
   return (

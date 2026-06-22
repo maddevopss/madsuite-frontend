@@ -26,6 +26,10 @@ jest.mock("../TimerContext", () => ({
   useTimer: jest.fn(),
 }));
 
+jest.mock("../ToastContext", () => ({
+  useToast: () => ({ showToast: jest.fn() }),
+}));
+
 const { useReports } = require("../hooks/useReports");
 const { useTimer } = require("../TimerContext");
 
@@ -40,22 +44,14 @@ describe("Dashboard sub-components", () => {
   test("DashboardMetrics affiche les indicateurs principaux", () => {
     render(
       <DashboardMetrics
-        stats={{
-          semaine: 12.34,
-          mois: 80,
-          facturable: 62.4,
-          montant_a_facturer: 1234.56,
-        }}
+        stats={{}}
       />,
     );
 
-    expect(screen.getByText("Cette semaine")).toBeInTheDocument();
-    expect(screen.getByText("12.3 h")).toBeInTheDocument();
-    expect(screen.getByText("Ce mois")).toBeInTheDocument();
-    expect(screen.getByText("80.0 h")).toBeInTheDocument();
-    expect(screen.getByText("Facturable")).toBeInTheDocument();
-    expect(screen.getByText("62%")).toBeInTheDocument();
-    expect(screen.getByText(/1[\s\u00a0]?234,56\s\$|1\s234,56\s\$|1 234,56\s\$/)).toBeInTheDocument();
+    expect(screen.getByText("Today: Stable Cognitive Flow")).toBeInTheDocument();
+    expect(screen.getByText("Focus Blocks")).toBeInTheDocument();
+    expect(screen.getByText("Fragmentation")).toBeInTheDocument();
+    expect(screen.getByText("Recovery Speed")).toBeInTheDocument();
   });
 
   test("DashboardCharts affiche un état vide sans données", () => {
@@ -91,7 +87,7 @@ describe("Dashboard sub-components", () => {
   test("DashboardActivityIntelligence affiche un état vide", () => {
     render(<DashboardActivityIntelligence />);
 
-    expect(screen.getByText("Activité intelligente")).toBeInTheDocument();
+    expect(screen.getByText(/Assistant Mémoire/i)).toBeInTheDocument();
     expect(screen.getByText("Aucune activité récente.")).toBeInTheDocument();
   });
 

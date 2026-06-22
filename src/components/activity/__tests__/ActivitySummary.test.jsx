@@ -18,7 +18,7 @@ jest.mock("recharts", () => ({
   ResponsiveContainer: ({ children }) => <div data-testid="responsive-container">{children}</div>,
 }));
 
-const emptySummaryResponse = { data: [] };
+const emptySummaryResponse = { data: { rows: [], topProductive: [], topDistractions: [] } };
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -40,19 +40,23 @@ describe("ActivitySummary Component", () => {
 
   test("affiche les applications productives et les distractions", async () => {
     api.get.mockResolvedValueOnce({
-      data: [
-        { app_name: "VS Code", category: "productif", total_seconds: 7200 },
-        { app_name: "YouTube", category: "distraction", total_seconds: 3600 },
-        { app_name: "Chrome", category: "neutre", total_seconds: 1800 },
-      ],
+      data: {
+        rows: [
+          { app_name: "VS Code", category: "productif", total_seconds: 7200 },
+          { app_name: "YouTube", category: "distraction", total_seconds: 3600 },
+          { app_name: "Chrome", category: "neutre", total_seconds: 1800 },
+        ],
+        topProductive: [{ name: "VS Code", total_seconds: 7200, heures: 2, formatTime: "2h 00m" }],
+        topDistractions: [{ name: "YouTube", total_seconds: 3600, heures: 1, formatTime: "1h 00m" }],
+        productivityScore: 57,
+      }
     });
 
     render(<ActivitySummary />);
 
     expect(await screen.findByText("VS Code")).toBeInTheDocument();
     expect(screen.getByText("YouTube")).toBeInTheDocument();
-    expect(screen.getByText("Neutre")).toBeInTheDocument();
-    expect(screen.getByText("Score de productivité")).toBeInTheDocument();
+    expect(screen.getByText("Score de Focus")).toBeInTheDocument();
     expect(screen.getByText((_, node) => node?.textContent === "57%")).toBeInTheDocument();
   });
 

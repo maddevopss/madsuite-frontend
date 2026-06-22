@@ -20,6 +20,14 @@ export const getUnbilledInvoiceEntries = async (clientId) => {
   return res.data;
 };
 
+// GET /api/invoices/unbilled-expenses — list unbilled expenses ready to invoice
+export const getUnbilledExpenses = async (clientId) => {
+  const res = await api.get("/invoices/unbilled-expenses", {
+    params: { client_id: clientId },
+  });
+  return res.data;
+};
+
 // POST /api/invoices — generate invoice from selected time entries
 export const createInvoice = async (data) => {
   const res = await api.post("/invoices", data);
@@ -38,8 +46,26 @@ export const deleteInvoice = async (id) => {
   return res.data;
 };
 
+// POST /api/invoices/:id/finalize
+export const finalizeInvoice = async (id) => {
+  const res = await api.post(`/invoices/${id}/finalize`);
+  return res.data;
+};
+
 // GET /api/invoices/:id/pdf — download PDF
 export const downloadInvoicePDF = async (id) => {
   const res = await api.get(`/invoices/${id}/pdf`, { responseType: "arraybuffer" });
+  return res.data;
+};
+
+// GET /api/invoices/:id/portal-link
+export const getInvoicePortalLink = async (id) => {
+  const res = await api.get(`/invoices/${id}/portal-link`);
+  return res.data;
+};
+
+// POST /api/invoices/:id/checkout
+export const checkoutInvoice = async (id) => {
+  const res = await api.post(`/invoices/${id}/checkout`);
   return res.data;
 };

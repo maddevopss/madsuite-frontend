@@ -3,7 +3,7 @@ import { Modal, Button, Badge } from "../../components/ui";
 import { formatDate, formatMoney } from "../../utils/formatters";
 import { STATUS_COLORS, STATUS_LABELS } from "./invoiceStatus";
 
-function ViewInvoiceModal({ show, invoice, onClose, onDownloadPDF }) {
+function ViewInvoiceModal({ show, invoice, onClose, onDownloadPDF, onPreviewPDF, onCopyPortalLink, onPay, onMakeRecurring }) {
   return (
     <Modal show={show} title={`Facture ${invoice?.invoice_number || ""}`} onClose={onClose}>
       {invoice && (
@@ -77,12 +77,25 @@ function ViewInvoiceModal({ show, invoice, onClose, onDownloadPDF }) {
             <p className="view-invoice-no-items">Aucune ligne de facturation.</p>
           )}
 
-          <div className="form-actions">
-            <Button variant="secondary" onClick={onClose}>
+          <div className="form-actions" style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "20px" }}>
+            <Button variant="secondary" onClick={onClose} style={{ marginRight: 'auto' }}>
               Fermer
             </Button>
-            <Button variant="primary" onClick={() => onDownloadPDF(invoice.id)}>
-              Télécharger PDF
+            <Button variant="secondary" onClick={() => onDownloadPDF(invoice.id)}>
+              Download PDF
+            </Button>
+            {onMakeRecurring && (
+              <Button variant="secondary" onClick={() => onMakeRecurring(invoice)}>
+                Rendre récurrente
+              </Button>
+            )}
+            {['draft', 'sent'].includes(invoice.status) && onPay && (
+              <Button variant="secondary" style={{ backgroundColor: '#f8fafc', color: '#635BFF', borderColor: '#e2e8f0' }} onClick={() => onPay(invoice.id)}>
+                PAY NOW (Stripe)
+              </Button>
+            )}
+            <Button variant="primary" onClick={() => onCopyPortalLink(invoice.id)}>
+              SEND INVOICE
             </Button>
           </div>
         </div>

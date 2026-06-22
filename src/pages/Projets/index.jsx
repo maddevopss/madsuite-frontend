@@ -13,6 +13,8 @@ import ViewProjectDetails from "./ViewProjectDetails";
 import { useAuth } from "../../api/authContext";
 import { useProjets } from "../../hooks/useProjets";
 import { useModal } from "../../hooks/useModal";
+import { useCognitiveBudget } from "../../hooks/useCognitiveBudget";
+import AdaptivePanel from "../../components/ui/AdaptivePanel";
 
 export default function Projets() {
   const { user } = useAuth();
@@ -24,6 +26,18 @@ export default function Projets() {
   const addModal = useModal();
   const viewModal = useModal();
   const editModal = useModal();
+
+  useCognitiveBudget({
+    pageName: 'Projets',
+    budget: { maxScore: 30 },
+    metrics: {
+      visibleActions: 3, 
+      visibleColors: 1,
+      animationsActive: 0,
+      competingCTAs: 0, 
+      visiblePanels: 2,
+    }
+  });
 
   const {
     projets = [],
@@ -117,7 +131,7 @@ export default function Projets() {
     <div className="projects-page">
       <ProjectsHeader isAdmin={isAdmin} onAdd={handleOpenAdd} onRefresh={handleRefresh} />
 
-      <div className="projects-toolbar">
+      <AdaptivePanel hideOnOverload={true} className="projects-toolbar">
         <Select value={selectedClient} onChange={handleClientChange}>
           <option value="">Tous les clients</option>
 
@@ -133,7 +147,7 @@ export default function Projets() {
           <option value="nom">Trier par projet</option>
           <option value="status">Trier par statut</option>
         </Select>
-      </div>
+      </AdaptivePanel>
 
       <ProjectsGrid
         projects={visibleProjects}

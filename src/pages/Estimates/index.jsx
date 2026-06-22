@@ -12,7 +12,7 @@ import ViewEstimateModal from "./ViewEstimateModal";
 import "./estimates.css";
 
 export default function Estimates() {
-  const { estimates, loading, loadEstimates, fetchEstimate, addEstimate, saveEstimate, removeEstimate, convertToInvoice, downloadPdf } = useEstimates();
+  const { estimates, loading, loadEstimates, fetchEstimate, addEstimate, saveEstimate, removeEstimate, convertToInvoice, convertToProject, downloadPdf } = useEstimates();
   const createModal = useModal();
   const viewModal = useModal();
   const editModal = useModal();
@@ -120,6 +120,24 @@ export default function Estimates() {
     [confirmProps, convertToInvoice, reloadEstimates]
   );
 
+  const handleConvertProject = useCallback(
+    async (id) => {
+      const confirmed = await confirmProps.confirm({
+        title: "Convertir en projet",
+        message: "Créer un espace de projet avec les heures de cette soumission pour démarrer le travail ?",
+        confirmText: "Convertir en projet",
+      });
+      if (confirmed) {
+        const project = await convertToProject(id);
+        if (project) {
+          reloadEstimates();
+          // Optionally we could redirect to Projects here, but reloading is fine.
+        }
+      }
+    },
+    [confirmProps, convertToProject, reloadEstimates]
+  );
+
   const handleQuickStatusUpdate = useCallback(
     async (id, newStatus) => {
       const success = await saveEstimate(id, { status: newStatus });
@@ -160,8 +178,8 @@ export default function Estimates() {
         <Loader label="Chargement des soumissions..." />
       ) : estimates.length === 0 ? (
         <EmptyState
-          title={statusFilter ? "Aucune soumission pour ce statut" : "Aucune soumission"}
-          message="Créez votre première soumission pour un client."
+          title={statusFilter ? "Aucune soumission pour ce statut" : "Aucun devis"}
+          message="Créez un devis pour commencer à facturer votre travail"
           action={
             statusFilter ? (
               <Button variant="secondary" onClick={() => setStatusFilter("")}>
@@ -202,6 +220,7 @@ export default function Estimates() {
         estimate={viewEstimate}
         onClose={viewModal.closeModal}
         onConvert={handleConvert}
+        onConvertProject={handleConvertProject}
         onUpdateStatus={handleQuickStatusUpdate}
         onDownload={downloadPdf}
       />

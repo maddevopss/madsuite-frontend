@@ -19,7 +19,7 @@
 }
 
 .users-header p {
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   opacity: 0.8;
 }
 
@@ -32,7 +32,7 @@
   gap: 12px;
   flex-wrap: wrap;
 
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
   padding: 20px;
   border-radius: 12px;
 
@@ -45,10 +45,10 @@
   min-width: 200px;
 
   padding: 12px;
-  border: 1px solid var(--color-border-strong);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
 
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
   color: var(--color-text-primary);
 
   outline: none;
@@ -94,19 +94,19 @@
 .users-head {
   padding: 12px 16px;
   font-weight: 700;
-  border-bottom: 1px solid var(--color-border-strong);
+  border-bottom: 1px solid var(--color-border);
   color: var(--color-text-primary);
 }
 
 .users-row {
   padding: 14px 16px;
-  border-bottom: 1px solid var(--color-border-strong);
+  border-bottom: 1px solid var(--color-border);
 
   transition: 0.2s;
 }
 
 .users-row:hover {
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
 }
 
 .user-actions {
@@ -118,7 +118,7 @@
 .users-empty {
   padding: 20px;
   text-align: center;
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
 }
 
 .users-toolbar {
@@ -132,9 +132,9 @@
   flex: 1;
   min-width: 260px;
   padding: 12px 14px;
-  border: 1px solid var(--color-border-strong);
+  border: 1px solid var(--color-border);
   border-radius: 10px;
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
   color: var(--color-text-primary);
   outline: none;
 }
@@ -145,9 +145,9 @@
 
 .users-role-filter {
   padding: 12px 14px;
-  border: 1px solid var(--color-border-strong);
+  border: 1px solid var(--color-border);
   border-radius: 10px;
-  background: var(--color-surface-strong);
+  background: var(--color-surface);
   color: var(--color-text-primary);
   outline: none;
 }
@@ -167,7 +167,7 @@
   width: 26px;
   height: 26px;
   border-radius: 999px;
-  border: 3px solid var(--color-border-strong);
+  border: 3px solid var(--color-border);
   border-top-color: var(--color-primary);
   animation: users-spin 0.8s linear infinite;
 }
@@ -246,7 +246,7 @@
 
 .users-modal-subtitle {
   margin-bottom: var(--spacing-md);
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
 }
 
 .history-list {
@@ -264,7 +264,7 @@
 
   background: var(--color-surface-muted);
 
-  border: 1px solid var(--color-border-strong);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
 }
 

@@ -53,7 +53,7 @@ export default function DopamineLog() {
             <div style={{ fontSize: '1.2rem' }}>{log.icon}</div>
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{log.text}</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{log.time}</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>{log.time}</div>
             </div>
           </div>
         ))}

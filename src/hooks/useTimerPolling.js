@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-import { getLatestActivity } from "../api/timer.api";
+import { syncTimerState } from "../api/timer.api";
 import { getElapsedSeconds } from "../timerContext.helpers";
 
 const DEFAULT_IDLE_WARNING_SECONDS = 270;
@@ -53,55 +53,63 @@ export function useIdleAndLongTimerMonitor({
 
     const interval = setInterval(async () => {
       try {
-        const latest = await getLatestActivity();
-        const thresholdHours = activeEntry?.long_timer_threshold_hours || 8;
-        const thresholdSeconds = thresholdHours * 3600;
+        const syncRes = await syncTimerState({
+          idleWarningSeconds: idleWarningSeconds || DEFAULT_IDLE_WARNING_SECONDS,
+          idleAutoPauseSeconds: idleAutoPauseSeconds || DEFAULT_IDLE_AUTO_PAUSE_SECONDS,
+          autoPauseEnabled: isAutoPauseEnabled,
+        });
+
         const now = Date.now();
 
+        // 1. Check auto-pause
+        if (syncRes?.autoPaused && !idlePausedRef.current) {
+          idlePausedRef.current = true;
+          showToast(syncRes.message || "Timer mis en pause pour inactivité.", "warning");
+          
+          idleWarningShownRef.current = false;
+          longTimerAlertShownRef.current = false;
+          
+          await toggleTimer(); // will sync UI to stopped state
+          return;
+        }
+
+        if (syncRes?.isRunning === false) {
+          return;
+        }
+
+        // 2. Check long timer warning from backend activeEntry
         if (
-          elapsedRef.current >= thresholdSeconds &&
+          syncRes?.activeEntry?.is_long_running &&
           (!longTimerAlertShownRef.current || now - lastLongTimerToastAtRef.current >= LONG_TIMER_REMINDER_MS)
         ) {
           longTimerAlertShownRef.current = true;
           lastLongTimerToastAtRef.current = now;
 
-          const warning =
-            activeEntry?.warning || `Timer en cours depuis plus de ${thresholdHours} heures. Es-tu encore sur ce projet?`;
-
+          const warning = syncRes.activeEntry.warning;
           setIsLongRunning(true);
           setActiveTimerWarning(warning);
           showToast(warning, "warning");
         }
 
-        const warningSeconds = Math.max(60, Number(idleWarningSeconds || DEFAULT_IDLE_WARNING_SECONDS));
-        const autoPauseSeconds = Math.max(warningSeconds + 30, Number(idleAutoPauseSeconds || DEFAULT_IDLE_AUTO_PAUSE_SECONDS));
-
+        // 3. Check idle warning from backend
         if (
-          latest?.idle_seconds >= warningSeconds &&
+          syncRes?.idleWarning &&
           !idleWarningShownRef.current &&
           now - lastIdleToastAtRef.current >= IDLE_TOAST_COOLDOWN_MS
         ) {
           idleWarningShownRef.current = true;
           lastIdleToastAtRef.current = now;
-          showToast("Inactivité détectée. Vérifie si ton timer roule encore.", "warning");
+          showToast(syncRes.message || "Inactivité détectée. Vérifie si ton timer roule encore.", "warning");
         }
 
-        if (isAutoPauseEnabled && latest?.is_idle && latest?.idle_seconds >= autoPauseSeconds && !idlePausedRef.current) {
-          idlePausedRef.current = true;
-          showToast("Timer mis en pause pour inactivite.", "warning");
-
-          idleWarningShownRef.current = false;
-          longTimerAlertShownRef.current = false;
-
-          await toggleTimer();
-        }
-
-        if (!latest?.is_idle && latest?.idle_seconds < warningSeconds) {
+        // Reset idle states if no warning from backend
+        if (!syncRes?.idleWarning && !syncRes?.autoPaused) {
           idleWarningShownRef.current = false;
           idlePausedRef.current = false;
         }
+
       } catch (err) {
-        console.error("CHECK IDLE:", err.response?.data || err.message);
+        console.error("SYNC TIMER:", err.response?.data || err.message);
       }
     }, 30000);
 

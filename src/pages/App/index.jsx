@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect } from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 import { useAuth } from "../../api/authContext";
 import { env } from "../../env";
